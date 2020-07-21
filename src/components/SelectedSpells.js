@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { List, Checkbox } from "semantic-ui-react";
+import { List } from "semantic-ui-react";
 
 class SelectedSpells extends Component {
   renderSpellbookList() {

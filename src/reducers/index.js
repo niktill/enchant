@@ -12,7 +12,7 @@ const spellbookSpellsReducer = () => {
 const selectSpellbookSpellReducer = (selectedSpellbookSpells = [], action) => {
     if (action.type === 'SPELLBOOK_SPELL_SELECT') {
         if (selectedSpellbookSpells.map( spell => spell.name).includes(action.payload.name)) {
-            return selectedSpellbookSpells.filter( spell => spell.name != action.payload.name);
+            return selectedSpellbookSpells.filter( spell => spell.name !== action.payload.name);
         }
         return [...selectedSpellbookSpells, action.payload];
     }
