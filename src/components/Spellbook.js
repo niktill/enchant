@@ -4,11 +4,13 @@ import { List, Checkbox } from "semantic-ui-react";
 import { selectSpellbookSpell } from "../actions";
 
 class Spellbook extends Component {
-
   renderSpellbookList() {
     return this.props.spellbookSpells.map((spell) => (
       <List.Item key={'spellbook-' + spell.slug}>
-        <Checkbox label={spell.name} onClick={() => this.props.selectSpellbookSpell(spell)}/>
+        <Checkbox 
+          label={spell.name} 
+          checked={this.props.selectedSpellbookSpells.includes(spell)}
+          onClick={() => this.props.selectSpellbookSpell(spell)}/>
       </List.Item>
     ));
   }
@@ -19,7 +21,9 @@ class Spellbook extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { spellbookSpells: state.spellbookSpells };
+  return { 
+    spellbookSpells: state.spellbookSpells, 
+    selectedSpellbookSpells: state.selectedSpellbookSpells };
 };
 
 export default connect(mapStateToProps, { selectSpellbookSpell })(Spellbook);

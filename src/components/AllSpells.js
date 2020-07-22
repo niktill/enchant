@@ -29,8 +29,4 @@ const mapStateToProps = (state) => {
   return { allSpells: state.allSpells, spellbookSpells: state.spellbookSpells };
 };
 
-export default connect(mapStateToProps, {
-  addSpellToSpellbook,
-  fetchAllSpells,
-  removeSpellFromSpellbook,
-})(AllSpells);
+export default connect(mapStateToProps, { addSpellToSpellbook, removeSpellFromSpellbook })(AllSpells);
