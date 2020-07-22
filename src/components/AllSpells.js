@@ -1,20 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { List, Checkbox } from "semantic-ui-react";
-import {
-  addSpellToSpellbook,
-  removeSpellFromSpellbook,
-  fetchAllSpells,
-} from "../actions";
+import { addSpellToSpellbook, removeSpellFromSpellbook } from "../actions";
 
-class Spellbook extends Component {
-  componentDidMount() {
-    this.props.fetchAllSpells();
-  }
-
+class AllSpells extends Component {
   renderAllSpellsList() {
     return this.props.allSpells.map((spell) => (
-      <List.Item key={"allspells-" + spell.name}>
+      <List.Item key={"allspells-" + spell.slug}>
         <Checkbox
           label={spell.name}
           checked={this.props.spellbookSpells.includes(spell)}
@@ -41,4 +33,4 @@ export default connect(mapStateToProps, {
   addSpellToSpellbook,
   fetchAllSpells,
   removeSpellFromSpellbook,
-})(Spellbook);
+})(AllSpells);
