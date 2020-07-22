@@ -1,5 +1,13 @@
 import { combineReducers } from 'redux';
 
+const fetchAllSpellsReducer = (allSpells = [], action) => {
+    if (action.type === 'FETCH_ALL_SPELLS') {
+        const fetchedSpells = (action.payload.results) ? action.payload.results : [];
+        return [...allSpells, ...fetchedSpells];
+    }
+    return allSpells;
+};
+
 const spellbookSpellsReducer = () => {
     return [
         {name: 'Firebolt', damage: '1d6'},
@@ -20,6 +28,7 @@ const selectSpellbookSpellReducer = (selectedSpellbookSpells = [], action) => {
 };
 
 export default combineReducers({
+    allSpells: fetchAllSpellsReducer,
     spellbookSpells: spellbookSpellsReducer,
     selectedSpellbookSpells: selectSpellbookSpellReducer
 });
