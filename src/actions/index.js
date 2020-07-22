@@ -11,6 +11,5 @@ export const selectSpellbookSpell = (spell) => {
 // Fetch all spells from API Action Creator
 export const fetchAllSpells = () => async (dispatch) => {
     const response = await dnd5eapi.get('/spells');
-    console.log(response);
     dispatch({ type: 'FETCH_ALL_SPELLS', payload: response.data})
 };

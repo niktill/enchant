@@ -5,12 +5,8 @@ import { selectSpellbookSpell, fetchAllSpells } from "../actions";
 
 class Spellbook extends Component {
 
-  componentDidMount() {
-    this.props.fetchAllSpells();
-  }
-
   renderSpellbookList() {
-    return this.props.allSpells.map((spell) => (
+    return this.props.spellbookSpells.map((spell) => (
       <List.Item key={spell.name}>
         <Checkbox label={spell.name} onClick={() => this.props.selectSpellbookSpell(spell)}/>
       </List.Item>
@@ -23,7 +19,7 @@ class Spellbook extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { spellbookSpells: state.spellbookSpells, allSpells: state.allSpells };
+  return { spellbookSpells: state.spellbookSpells };
 };
 
 export default connect(mapStateToProps, { selectSpellbookSpell, fetchAllSpells })(Spellbook);
