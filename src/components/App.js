@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Tab } from "semantic-ui-react";
-import AllSpells from "./AllSpells";
 import Spellbook from "./Spellbook";
 import SelectedSpells from "./SelectedSpells";
+import AllSpells from "./AllSpells";
 
 class App extends Component {
   render() {

@@ -8,13 +8,14 @@ const fetchAllSpellsReducer = (allSpells = [], action) => {
     return allSpells;
 };
 
-const spellbookSpellsReducer = () => {
-    return [
-        {name: 'Firebolt', damage: '1d6'},
-        {name: 'Magic Missle', damage: '1d4'},
-        {name: 'Silent Image', damage: 'N/A'},
-        {name: 'Mend', damage: 'N/A'}
-    ]
+const spellbookSpellsReducer = (spellBookSpells = [], action) => {
+    if (action.type === 'ADD_SPELL_TO_SPELLBOOK') {
+        return [...spellBookSpells, action.payload];
+    } else if (action.type === 'REMOVE_SPELL_FROM_SPELLBOOK') {
+        return spellBookSpells.filter( spell => spell.name !== action.payload.name);
+    } else {
+        return spellBookSpells;
+    }
 };
 
 const selectSpellbookSpellReducer = (selectedSpellbookSpells = [], action) => {

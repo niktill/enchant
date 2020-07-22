@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { List, Checkbox } from "semantic-ui-react";
-import { selectSpellbookSpell, fetchAllSpells } from "../actions";
+import {
+  addSpellToSpellbook,
+  removeSpellFromSpellbook,
+  fetchAllSpells,
+} from "../actions";
 
 class Spellbook extends Component {
   componentDidMount() {
@@ -10,10 +14,15 @@ class Spellbook extends Component {
 
   renderAllSpellsList() {
     return this.props.allSpells.map((spell) => (
-      <List.Item key={spell.name}>
+      <List.Item key={"allspells-" + spell.name}>
         <Checkbox
           label={spell.name}
-          onClick={() => this.props.selectSpellbookSpell(spell)}
+          checked={this.props.spellbookSpells.includes(spell)}
+          onClick={
+            this.props.spellbookSpells.includes(spell)
+              ? () => this.props.removeSpellFromSpellbook(spell)
+              : () => this.props.addSpellToSpellbook(spell)
+          }
         />
       </List.Item>
     ));
@@ -25,10 +34,11 @@ class Spellbook extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { allSpells: state.allSpells };
+  return { allSpells: state.allSpells, spellbookSpells: state.spellbookSpells };
 };
 
 export default connect(mapStateToProps, {
-  selectSpellbookSpell,
+  addSpellToSpellbook,
   fetchAllSpells,
+  removeSpellFromSpellbook,
 })(Spellbook);

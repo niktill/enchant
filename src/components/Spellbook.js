@@ -7,7 +7,7 @@ class Spellbook extends Component {
 
   renderSpellbookList() {
     return this.props.spellbookSpells.map((spell) => (
-      <List.Item key={spell.name}>
+      <List.Item key={'sellbook-' + spell.name}>
         <Checkbox label={spell.name} onClick={() => this.props.selectSpellbookSpell(spell)}/>
       </List.Item>
     ));
