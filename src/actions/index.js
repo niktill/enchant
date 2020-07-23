@@ -26,6 +26,16 @@ export const removeSpellFromSpellbook = (spell) => {
 
 // Fetch all spells from API Action Creator
 export const fetchAllSpells = () => async (dispatch) => {
-    const response = await dnd5eapi.get('/spells');
-    dispatch({ type: 'FETCH_ALL_SPELLS', payload: response.data})
+    let pageNum = 1;
+    const pageNumEnd = 7;
+    for (pageNum; pageNum < pageNumEnd + 1; pageNum++) {
+        try {
+            let response = await dnd5eapi.get('/spells?page=' + pageNum.toString());
+            if (response.status === 200) {
+                dispatch({ type: 'FETCH_ALL_SPELLS', payload: response.data })
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    }
 };

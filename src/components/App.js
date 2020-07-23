@@ -10,16 +10,14 @@ class App extends Component {
   componentDidMount() {
     this.props.fetchAllSpells()
   };
-  
+
   render() {
     return (
-      <div>
-        <Tab className='appTab' panes ={[
-          {menuItem:'Daily Spells', render: () => <Tab.Pane><SelectedSpells/></Tab.Pane>},
-          {menuItem:'Spell Book', render: () => <Tab.Pane><Spellbook/></Tab.Pane>},
-          {menuItem:'All Spells', render: () => <Tab.Pane><AllSpells/></Tab.Pane>}
-        ]} />
-      </div>
+      <Tab className='appTab' panes={[
+        { menuItem: 'Daily Spells', render: () => <Tab.Pane><SelectedSpells /></Tab.Pane> },
+        { menuItem: 'Spell Book', render: () => <Tab.Pane><Spellbook /></Tab.Pane> },
+        { menuItem: 'All Spells', render: () => <Tab.Pane><AllSpells /></Tab.Pane> }
+      ]} />
     );
   }
 }

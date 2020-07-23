@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 const fetchAllSpellsReducer = (allSpells = [], action) => {
     if (action.type === 'FETCH_ALL_SPELLS') {
         const fetchedSpells = (action.payload.results) ? action.payload.results : [];
-        return [...fetchedSpells];
+        return [...allSpells, ...fetchedSpells];
     }
     return allSpells;
 };
