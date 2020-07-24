@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { List, Checkbox, Grid } from "semantic-ui-react";
+import { List, Checkbox, Grid, Popup, Label, Button } from "semantic-ui-react";
 import { addSpellToSpellbook, removeSpellFromSpellbook } from "../actions";
 
 class AllSpells extends Component {
-  renderAllSpellsList() {
-    const numberOfSpells = this.props.allSpells.length;    
+  renderAllSpellsIntoColumns() {
+    const numberOfSpells = this.props.apiData.spells.length;
     const maxSpellInColumn = 50;
     const numberOfColumns = Math.ceil(numberOfSpells / maxSpellInColumn);
     let AllSpellsColumns = []
@@ -15,7 +15,7 @@ class AllSpells extends Component {
         ? numberOfSpells - 1 : (columnNum * maxSpellInColumn) - 1;
       AllSpellsColumns.push(
         (<Grid.Column key={columnNum}>
-          {this.props.allSpells.slice(curSpellIndexMin, curSpellIndexMax).map((spell) => (
+          {this.props.apiData.spells.slice(curSpellIndexMin, curSpellIndexMax).map((spell) => (
             (<List.Item key={"allspells-" + spell.slug}>
               <Checkbox
                 label={spell.name}
@@ -29,17 +29,36 @@ class AllSpells extends Component {
             </List.Item>)
           ))}
         </Grid.Column>))
-    }    
+    }
     return <Grid doubling stackable columns={numberOfColumns}>{AllSpellsColumns}</Grid>;
   }
 
+  renderClassSpellFilterButtons() {
+    return this.props.apiData.classes.map((dndClass) => (
+      <Button key={dndClass.slug}>
+        {dndClass.name}
+      </Button>
+    ));
+  }
+
   render() {
-    return this.renderAllSpellsList();
+    return (
+      <div>
+        <Popup hoverable on={['click']}
+          content={<Button.Group>{this.renderClassSpellFilterButtons()}</Button.Group>}
+          trigger={<Button>Filter</Button>} />
+        {this.renderAllSpellsIntoColumns()}
+      </div>
+    )
   }
 }
 
 const mapStateToProps = (state) => {
-  return { allSpells: state.allSpells, spellbookSpells: state.spellbookSpells };
+  return {
+    apiData: state.apiData,
+    allClasses: state.allClasses,
+    spellbookSpells: state.spellbookSpells
+  };
 };
 
 export default connect(mapStateToProps, { addSpellToSpellbook, removeSpellFromSpellbook })(AllSpells);

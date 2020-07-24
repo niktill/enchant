@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
-// Reducer for fetching spell data from API
-const fetchAllSpellsReducer = (allSpells = [], action) => {
-    if (action.type === 'FETCH_ALL_SPELLS') {
-        const fetchedSpells = (action.payload.results) ? action.payload.results : [];
-        return [...allSpells, ...fetchedSpells];
+// Reducer for fetching API data
+const fetchAPIDataReducer = (apiData = {}, action) => {
+    if (action.type === 'API_DATA_FETCHED') {
+        apiData = action.payload;
+        apiData.complete = 1;
     }
-    return allSpells;
+    return apiData;
 };
 
 // Reducer that manages spells in spell book
@@ -33,7 +33,7 @@ const selectSpellbookSpellReducer = (selectedSpellbookSpells = [], action) => {
 };
 
 export default combineReducers({
-    allSpells: fetchAllSpellsReducer,
+    apiData: fetchAPIDataReducer,
     spellbookSpells: spellbookSpellsReducer,
     selectedSpellbookSpells: selectSpellbookSpellReducer
 });
