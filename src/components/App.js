@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Tab, Loader, Dimmer } from "semantic-ui-react";
+import { Tab, Loader, Dimmer, Segment } from "semantic-ui-react";
 import Spellbook from "./Spellbook";
 import SelectedSpells from "./SelectedSpells";
 import AllSpells from "./AllSpells";
@@ -12,15 +12,16 @@ class App extends Component {
   };
 
   render() {
-    {if (!this.props.apiData.complete) {
-      return (<Loader active size='huge' content='Loading Data'/>)
-    } else {
-      return (<Tab className='appTab' panes={[
-        { menuItem: 'Daily Spells', render: () => <Tab.Pane><SelectedSpells /></Tab.Pane> },
-        { menuItem: 'Spell Book', render: () => <Tab.Pane><Spellbook /></Tab.Pane> },
-        { menuItem: 'All Spells', render: () => <Tab.Pane><AllSpells /></Tab.Pane> }
-      ]}/>);
-    }}
+    return (
+      <Dimmer.Dimmable as={Segment} dimmed={!this.props.apiData.complete}>
+        <Dimmer active={!this.props.apiData.complete}><Loader size='huge' content='Loading Data' /></Dimmer>
+        <Tab className='appTab' panes={[
+          { menuItem: 'Daily Spells', render: () => <Tab.Pane><SelectedSpells /></Tab.Pane> },
+          { menuItem: 'Spell Book', render: () => <Tab.Pane><Spellbook /></Tab.Pane> },
+          { menuItem: 'All Spells', render: () => <Tab.Pane><AllSpells /></Tab.Pane> }
+        ]} />
+      </Dimmer.Dimmable>
+    );
   }
 }
 

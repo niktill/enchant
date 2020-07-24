@@ -32,8 +32,20 @@ const selectSpellbookSpellReducer = (selectedSpellbookSpells = [], action) => {
     return selectedSpellbookSpells;
 };
 
+//Reducer that manages spell filters
+const selectFilterSpellsClassReducer = (filterSpellsClasses = [], action) => {
+    if (action.type === 'SELECT_SPELL_FILTER_CLASS') {
+        if (filterSpellsClasses.includes(action.payload)) {
+            return filterSpellsClasses.filter( spellFilterClassName => spellFilterClassName !== action.payload);
+        }
+        return [...filterSpellsClasses, action.payload];
+    }
+    return filterSpellsClasses;
+};
+
 export default combineReducers({
     apiData: fetchAPIDataReducer,
     spellbookSpells: spellbookSpellsReducer,
-    selectedSpellbookSpells: selectSpellbookSpellReducer
+    selectedSpellbookSpells: selectSpellbookSpellReducer,
+    selectedFilterSpellsClass: selectFilterSpellsClassReducer
 });

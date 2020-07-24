@@ -2,6 +2,7 @@ import dnd5eapi from '../apis/dnd5eapi';
 
 // Fetch API data Action Creator
 export const fetchAPIData = () => async (dispatch) => {
+    const listOfNonSpellCasters = ['Barbarian', 'Fighter', 'Monk', 'Rogue'];
     let data = { spells: [], classes: [] }
     let pageNum = 1;
     const pageNumEnd = 7;
@@ -16,7 +17,7 @@ export const fetchAPIData = () => async (dispatch) => {
         // Fetch class data from API
         let response = await dnd5eapi.get('/classes');
         if (response.status === 200) {
-            data.classes = response.data.results;
+            data.classes = response.data.results.filter(classFromAPI => !listOfNonSpellCasters.includes(classFromAPI.name));
         }
         dispatch({ type: 'API_DATA_FETCHED', payload: data });
     } catch(err) {
@@ -49,9 +50,9 @@ export const removeSpellFromSpellbook = (spell) => {
 };
 
 // Filter Spells by Dnd Class Action Creator
-export const filterSpellsByClass = (dndClass) => {
+export const selectSpellFilterClass = (spellFilterClassName) => {
     return {
-        type: 'FILTER_SPELLS_BY_CLASS',
-        payload: dndClass
+        type: 'SELECT_SPELL_FILTER_CLASS',
+        payload: spellFilterClassName
     };
 };
