@@ -1,0 +1,33 @@
+@media only screen and (max-width: 767px) {
+
+    .ui.grid>.stackable.stackable.row>.column,
+    .ui.stackable.grid>.column.grid>.column,
+    .ui.stackable.grid>.column.row>.column,
+    .ui.stackable.grid>.column:not(.row) {
+        padding: 0 !important;
+    }
+    .ui.grid>.stackable.stackable.row>.column:first-of-type,
+    .ui.stackable.grid>.column.grid>.column:first-of-type,
+    .ui.stackable.grid>.column.row>.column:first-of-type,
+    .ui.stackable.grid>.column:not(.row):first-of-type {
+        padding-top: 2rem !important;
+    }
+    .ui.grid>.stackable.stackable.row>.column:last-of-type,
+    .ui.stackable.grid>.column.grid>.column:last-of-type,
+    .ui.stackable.grid>.column.row>.column:last-of-type,
+    .ui.stackable.grid>.column:not(.row):last-of-type {
+        padding-bottom: 2rem !important;
+    }
+}
+
+.ui.checkbox .box, .ui.checkbox label {
+    font-size: 16px;
+}
+
+.ui.dimmer {
+    background-color: rgba(129, 129, 129, 0.822) !important;
+}
+
+#root, #root .dimmable {
+    height: 100%;
+}

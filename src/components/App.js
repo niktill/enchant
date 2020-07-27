@@ -13,9 +13,9 @@ class App extends Component {
 
   render() {
     return (
-      <Dimmer.Dimmable as={Segment} dimmed={!this.props.apiData.complete}>
-        <Dimmer active={!this.props.apiData.complete}><Loader size='huge' content='Loading Data' /></Dimmer>
-        <Tab className='appTab' panes={[
+      <Dimmer.Dimmable dimmed={!this.props.apiData.complete}>
+        <Dimmer active={!this.props.apiData.complete}><Loader size='massive' content='Loading Spells' /></Dimmer>
+        <Tab id='appTab' panes={[
           { menuItem: 'Daily Spells', render: () => <Tab.Pane><SelectedSpells /></Tab.Pane> },
           { menuItem: 'Spell Book', render: () => <Tab.Pane><Spellbook /></Tab.Pane> },
           { menuItem: 'All Spells', render: () => <Tab.Pane><AllSpells /></Tab.Pane> }
