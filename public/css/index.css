@@ -19,6 +19,9 @@
         padding-bottom: 2rem !important;
     }
 }
+.spellListGrid.ui.grid {
+    margin-top: 1rem;
+}
 
 .ui.checkbox .box, .ui.checkbox label {
     font-size: 16px;

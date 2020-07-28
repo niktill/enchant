@@ -50,9 +50,9 @@ export const removeSpellFromSpellbook = (spell) => {
 };
 
 // Filter Spells by Dnd Class Action Creator
-export const selectSpellFilterClass = (spellFilterClassName) => {
+export const selectSpellFilterClass = (spellFilterClassName, spellTabName) => {
     return {
         type: 'SELECT_SPELL_FILTER_CLASS',
-        payload: spellFilterClassName
+        payload: {spellFilterClassName: spellFilterClassName, spellTabName: spellTabName}
     };
 };

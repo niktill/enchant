@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Popup, Container, Header } from "semantic-ui-react";
-import { selectSpellFilterClass } from "../actions";
 
 class SpellDescription extends Component {
 
   render() {
-    console.log(this.props.spell);
     return (
       <p>
         <br />

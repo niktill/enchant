@@ -14,7 +14,7 @@ const spellbookSpellsReducer = (spellBookSpells = [], action) => {
     if (action.type === 'ADD_SPELL_TO_SPELLBOOK') {
         return [...spellBookSpells, action.payload];
     } else if (action.type === 'REMOVE_SPELL_FROM_SPELLBOOK') {
-        return spellBookSpells.filter( spell => spell.slug !== action.payload.slug);
+        return spellBookSpells.filter(spell => spell.slug !== action.payload.slug);
     }
     return spellBookSpells;
 };
@@ -22,30 +22,40 @@ const spellbookSpellsReducer = (spellBookSpells = [], action) => {
 // Reducer that manages selected spells (daily spells)
 const selectSpellbookSpellReducer = (selectedSpellbookSpells = [], action) => {
     if (action.type === 'SPELLBOOK_SPELL_SELECT') {
-        if (selectedSpellbookSpells.map( spell => spell.slug).includes(action.payload.slug)) {
-            return selectedSpellbookSpells.filter( spell => spell.slug !== action.payload.slug);
+        if (selectedSpellbookSpells.map(spell => spell.slug).includes(action.payload.slug)) {
+            return selectedSpellbookSpells.filter(spell => spell.slug !== action.payload.slug);
         }
         return [...selectedSpellbookSpells, action.payload];
     } else if (action.type === 'REMOVE_SPELL_FROM_SPELLBOOK') {
-        return selectedSpellbookSpells.filter( spell => spell.slug !== action.payload.slug);
+        return selectedSpellbookSpells.filter(spell => spell.slug !== action.payload.slug);
     }
     return selectedSpellbookSpells;
 };
 
+const filterDefault = {
+    dailySpells: { classes: [], level: [] },
+    spellBookSpells: { classes: [], level: [] },
+    allSpells: { classes: [], level: [] }
+}
 //Reducer that manages spell filters
-const selectFilterSpellsClassReducer = (filterSpellsClasses = [], action) => {
+const selectFilterReducer = (spellFilters = filterDefault, action) => {
     if (action.type === 'SELECT_SPELL_FILTER_CLASS') {
-        if (filterSpellsClasses.includes(action.payload)) {
-            return filterSpellsClasses.filter( spellFilterClassName => spellFilterClassName !== action.payload);
+        let newFilters = JSON.parse(JSON.stringify(spellFilters));
+        let classFilterList = newFilters[action.payload.spellTabName].classes;
+        if (classFilterList.includes(action.payload.spellFilterClassName)) {
+            newFilters[action.payload.spellTabName].classes = classFilterList.filter(
+                spellFilterClassName => spellFilterClassName !== action.payload.spellFilterClassName);
+            return newFilters;
         }
-        return [...filterSpellsClasses, action.payload];
+        newFilters[action.payload.spellTabName].classes = [...classFilterList, action.payload.spellFilterClassName];
+        return newFilters;
     }
-    return filterSpellsClasses;
+    return spellFilters;
 };
 
 export default combineReducers({
     apiData: fetchAPIDataReducer,
     spellbookSpells: spellbookSpellsReducer,
     selectedSpellbookSpells: selectSpellbookSpellReducer,
-    selectedFilterSpellsClass: selectFilterSpellsClassReducer
+    selectedFilters: selectFilterReducer
 });
