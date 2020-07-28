@@ -4,7 +4,7 @@ import { List } from "semantic-ui-react";
 
 class DailySpells extends Component {
   renderSpellbookList() {
-    return this.props.selectedSpellbookSpells.map((selectedSpell) => (
+    return this.props.dailySpells.map((selectedSpell) => (
       <List.Item key={selectedSpell.name}>
         {selectedSpell.name}
       </List.Item>
@@ -17,7 +17,7 @@ class DailySpells extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { selectedSpellbookSpells: state.selectedSpellbookSpells };
+  return { dailySpells: state.dailySpells };
 };
 
 export default connect(mapStateToProps)(DailySpells);

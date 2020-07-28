@@ -36,7 +36,7 @@ export const selectSpellbookSpell = (spell) => {
 // Add Spell to Spellbook Action Creator
 export const addSpellToSpellbook = (spell) => {
     return {
-        type: 'ADD_SPELL_TO_SPELLBOOK',
+        type: 'ALL_SPELLS_SPELL_SELECT',
         payload: spell
     };
 };
@@ -52,7 +52,7 @@ export const removeSpellFromSpellbook = (spell) => {
 // Filter Spells by Dnd Class Action Creator
 export const selectSpellFilterClass = (spellFilterClassName, spellTabName) => {
     return {
-        type: 'SELECT_SPELL_FILTER_CLASS',
+        type: 'SPELL_FILTER_CLASS_SELECT',
         payload: {spellFilterClassName: spellFilterClassName, spellTabName: spellTabName}
     };
 };

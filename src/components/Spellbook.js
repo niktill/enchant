@@ -11,7 +11,7 @@ class Spellbook extends Component {
         <FilterSpells spellTabName='spellBookSpells' />
         <SpellList spellTabName='spellBookSpells'
           spells={this.props.spellbookSpells}
-          spellListMonitors={this.props.selectedSpellbookSpells}
+          spellListMonitors={this.props.dailySpells}
           selectSpellAction={spell => this.props.selectSpellbookSpell(spell)} />
       </div>
     )
@@ -21,7 +21,7 @@ class Spellbook extends Component {
 const mapStateToProps = (state) => {
   return {
     spellbookSpells: state.spellbookSpells,
-    selectedSpellbookSpells: state.selectedSpellbookSpells
+    dailySpells: state.dailySpells
   };
 };
 
