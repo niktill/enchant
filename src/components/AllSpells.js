@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import FilterSpells from './FilterSpells';
 import SpellList from './SpellList';
-import { addSpellToSpellbook, removeSpellFromSpellbook } from "../actions";
+import { selectAllSpellsSpell } from "../actions";
 
 class AllSpells extends Component {
   render() {
@@ -12,7 +12,7 @@ class AllSpells extends Component {
         <SpellList spellTabName='allSpells'
           spells={this.props.apiData.spells}
           spellListMonitors={this.props.spellbookSpells}
-          selectSpellAction={spell => this.props.addSpellToSpellbook(spell)} />
+          selectSpellAction={spell => this.props.selectAllSpellsSpell(spell)} />
       </div>
     )
   }
@@ -26,4 +26,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { addSpellToSpellbook, removeSpellFromSpellbook })(AllSpells);
+export default connect(mapStateToProps, { selectAllSpellsSpell })(AllSpells);

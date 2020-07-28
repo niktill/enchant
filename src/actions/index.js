@@ -9,7 +9,7 @@ export const fetchAPIData = () => async (dispatch) => {
     try {
         // Fetch spell Data from API
         for (pageNum; pageNum < pageNumEnd + 1; pageNum++) {
-            let response = await dnd5eapi.get('/spells?page=' + pageNum.toString());
+            let response = await dnd5eapi.get('/spells/?ordering=level_int&page=' + pageNum.toString());
             if (response.status === 200) {
                 data.spells = [...data.spells, ...response.data.results]
             }
@@ -34,17 +34,9 @@ export const selectSpellbookSpell = (spell) => {
 };
 
 // Add Spell to Spellbook Action Creator
-export const addSpellToSpellbook = (spell) => {
+export const selectAllSpellsSpell = (spell) => {
     return {
         type: 'ALL_SPELLS_SPELL_SELECT',
-        payload: spell
-    };
-};
-
-// Remove Spell from Spellbook Action Creator
-export const removeSpellFromSpellbook = (spell) => {
-    return {
-        type: 'REMOVE_SPELL_FROM_SPELLBOOK',
         payload: spell
     };
 };

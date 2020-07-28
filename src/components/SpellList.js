@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { List, Checkbox, Grid, Message, Container, Popup } from "semantic-ui-react";
 import SpellDescription from './SpellDescription';
-import { addSpellToSpellbook, removeSpellFromSpellbook } from "../actions";
+import { selectAllSpellsSpell } from "../actions";
 
 class SpellList extends Component {
   getFilteredSpells() {
@@ -45,7 +45,10 @@ class SpellList extends Component {
         <Container textAlign='center'>
           <Message compact>
             <Message.Header>No Spells Available</Message.Header>
-            <p>There are no spells defined by the filters selected.</p>
+            <p>{(this.props.spells.length === 0) ?
+              'This spellbook is empty! Select spells in the All Spells tab to add to this spellbook.' :
+              'There are no spells defined by the filters selected.'}
+            </p>
           </Message>
         </Container>)
     }
@@ -65,4 +68,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { addSpellToSpellbook, removeSpellFromSpellbook })(SpellList);
+export default connect(mapStateToProps, { selectAllSpellsSpell })(SpellList);
