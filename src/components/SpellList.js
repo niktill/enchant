@@ -16,7 +16,7 @@ class SpellList extends Component {
       this.getFilteredSpells() : this.props.spells;
     const numberOfSpells = spellsToRender.length;
     if (numberOfSpells > 0) {
-      const maxSpellInColumn = 50;
+      const maxSpellInColumn = 60;
       const numberOfColumns = Math.ceil(numberOfSpells / maxSpellInColumn);
       let AllSpellsColumns = [];
       for (let columnNum = 1; columnNum < numberOfColumns + 1; columnNum++) {
@@ -24,9 +24,10 @@ class SpellList extends Component {
         let curSpellIndexMax = (numberOfSpells < (columnNum * maxSpellInColumn))
           ? numberOfSpells : (columnNum * maxSpellInColumn) - 1;
         AllSpellsColumns.push(
-          (<Grid.Column key={columnNum} computer={3} tablet={4}>
+          (<Grid.Column key={columnNum}>
             {spellsToRender.slice(curSpellIndexMin, curSpellIndexMax).map((spell) => {
-              return (<List.Item key={this.props.spellTabName + "spells-" + spell.slug}>
+              return (
+              <List.Item key={this.props.spellTabName + "spells-" + spell.slug}>
                 <Popup wide='very' basic size='large' header={spell.name}
                   content={<SpellDescription spell={spell} />}
                   trigger={
@@ -34,12 +35,10 @@ class SpellList extends Component {
                       label={spell.name}
                       checked={this.props.spellListMonitors.includes(spell)}
                       onClick={() => this.props.selectSpellAction(spell)} />} />
-              </List.Item>)
-
-            })}
+              </List.Item>)})}
           </Grid.Column>))
       }
-      return <Grid className="spellListGrid" stackable doubling>{AllSpellsColumns}</Grid>;
+      return <Grid className="spellListGrid" columns={numberOfColumns} stackable doubling>{AllSpellsColumns}</Grid>;
     } else {
       return (
         <Container textAlign='center'>
