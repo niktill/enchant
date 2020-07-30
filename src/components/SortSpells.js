@@ -33,7 +33,7 @@ class SortSpells extends Component {
           </Button>
           {this.renderClassSpellSortButtons()}
         </Button.Group>}
-        trigger={<Button hidden>Sort</Button>} />
+        trigger={<Button>Sort</Button>} />
     )
   }
 }

@@ -18,7 +18,7 @@ class FilterSpells extends Component {
     return (
       <Popup hoverable on={['click']}
         content={<Button.Group>{this.renderClassSpellFilterButtons()}</Button.Group>}
-        trigger={<Button hidden>Filter</Button>} />
+        trigger={<Button>Filter</Button>} />
     )
   }
 }
