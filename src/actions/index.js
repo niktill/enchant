@@ -9,7 +9,7 @@ export const fetchAPIData = () => async (dispatch) => {
     try {
         // Fetch spell Data from API
         for (pageNum; pageNum < pageNumEnd + 1; pageNum++) {
-            let response = await dnd5eapi.get('/spells/?ordering=level_int&page=' + pageNum.toString());
+            let response = await dnd5eapi.get('/spells/?page=' + pageNum.toString());
             if (response.status === 200) {
                 data.spells = [...data.spells, ...response.data.results]
             }
@@ -42,9 +42,17 @@ export const selectAllSpellsSpell = (spell) => {
 };
 
 // Filter Spells by Dnd Class Action Creator
-export const selectSpellFilterClass = (spellFilterClassName, spellTabName) => {
+export const selectSpellFilterClass = (spellFilterClassName, tabName) => {
     return {
         type: 'SPELL_FILTER_CLASS_SELECT',
-        payload: {spellFilterClassName: spellFilterClassName, spellTabName: spellTabName}
+        payload: {spellFilterClassName: spellFilterClassName, tabName: tabName}
+    };
+};
+
+// Sort Spells by Level Action Creator
+export const selectSortSpellLevel = (sorterName, tabName) => {
+    return {
+        type: 'SORT_SPELLS_SELECT',
+        payload: {sorterName: sorterName, tabName: tabName}
     };
 };

@@ -7,8 +7,8 @@ class FilterSpells extends Component {
   renderClassSpellFilterButtons() {
     return this.props.apiData.classes.map((dndClass) => (
       <Button key={dndClass.slug}
-        active={this.props.selectedFilters[this.props.spellTabName].classes.includes(dndClass.name)}
-        onClick={() => this.props.selectSpellFilterClass(dndClass.name, this.props.spellTabName)}>
+        active={this.props.selectedFilters[this.props.tabName].classes.includes(dndClass.name)}
+        onClick={() => this.props.selectSpellFilterClass(dndClass.name, this.props.tabName)}>
         {dndClass.name}
       </Button>
     ));

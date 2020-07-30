@@ -1,26 +1,5 @@
-@media only screen and (max-width: 767px) {
-
-    .ui.grid>.stackable.stackable.row>.column,
-    .ui.stackable.grid>.column.grid>.column,
-    .ui.stackable.grid>.column.row>.column,
-    .ui.stackable.grid>.column:not(.row) {
-        padding: 0 !important;
-    }
-    .ui.grid>.stackable.stackable.row>.column:first-of-type,
-    .ui.stackable.grid>.column.grid>.column:first-of-type,
-    .ui.stackable.grid>.column.row>.column:first-of-type,
-    .ui.stackable.grid>.column:not(.row):first-of-type {
-        padding-top: 2rem !important;
-    }
-    .ui.grid>.stackable.stackable.row>.column:last-of-type,
-    .ui.stackable.grid>.column.grid>.column:last-of-type,
-    .ui.stackable.grid>.column.row>.column:last-of-type,
-    .ui.stackable.grid>.column:not(.row):last-of-type {
-        padding-bottom: 2rem !important;
-    }
-}
 .spellListGrid.ui.grid {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .ui.checkbox .box, .ui.checkbox label {
@@ -33,4 +12,13 @@
 
 #root, #root .dimmable {
     height: 100%;
+}
+
+.spellListGrid h3.spellListHeader {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.spellListGrid .column .item:first-of-type .spellListHeader {
+    margin-top: 0rem;
 }

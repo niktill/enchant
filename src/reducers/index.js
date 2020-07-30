@@ -33,30 +33,46 @@ const dailySpellsReducer = (dailySpells = [], action) => {
     return dailySpells;
 };
 
+//Reducer that manages spell filters
 const filterDefault = {
     dailySpells: { classes: [], level: [] },
     spellBookSpells: { classes: [], level: [] },
     allSpells: { classes: [], level: [] }
 }
-//Reducer that manages spell filters
 const selectFilterReducer = (spellFilters = filterDefault, action) => {
     if (action.type === 'SPELL_FILTER_CLASS_SELECT') {
         let newFilters = JSON.parse(JSON.stringify(spellFilters));
-        let classFilterList = newFilters[action.payload.spellTabName].classes;
+        let classFilterList = newFilters[action.payload.tabName].classes;
         if (classFilterList.includes(action.payload.spellFilterClassName)) {
-            newFilters[action.payload.spellTabName].classes = classFilterList.filter(
+            newFilters[action.payload.tabName].classes = classFilterList.filter(
                 spellFilterClassName => spellFilterClassName !== action.payload.spellFilterClassName);
             return newFilters;
         }
-        newFilters[action.payload.spellTabName].classes = [...classFilterList, action.payload.spellFilterClassName];
+        newFilters[action.payload.tabName].classes = [...classFilterList, action.payload.spellFilterClassName];
         return newFilters;
     }
     return spellFilters;
+};
+
+//Reducer that manages spell sorting
+const sortDefault = {
+    dailySpells: 'alpha-down',
+    spellBookSpells: 'alpha-down',
+    allSpells: 'alpha-down'
+}
+const selectSortingReducer = (spellSorters = sortDefault, action) => {
+    if (action.type === 'SORT_SPELLS_SELECT') {
+        let newSorters = JSON.parse(JSON.stringify(spellSorters));
+        newSorters[action.payload.tabName] = action.payload.sorterName;
+        return newSorters;
+    }
+    return spellSorters;
 };
 
 export default combineReducers({
     apiData: fetchAPIDataReducer,
     spellbookSpells: spellbookSpellsReducer,
     dailySpells: dailySpellsReducer,
-    selectedFilters: selectFilterReducer
+    selectedFilters: selectFilterReducer,
+    selectedSorter: selectSortingReducer
 });

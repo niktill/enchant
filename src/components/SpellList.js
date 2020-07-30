@@ -7,35 +7,59 @@ import { selectAllSpellsSpell } from "../actions";
 class SpellList extends Component {
   getFilteredSpells() {
     return this.props.spells.filter((spell) =>
-      this.props.selectedFilters[this.props.spellTabName].classes.some((filterSpellClassNames) =>
+      this.props.selectedFilters[this.props.tabName].classes.some((filterSpellClassNames) =>
         spell.dnd_class.includes(filterSpellClassNames))
     );
   }
+  sortSpells(sorter, spells) {
+    let isAlphaUp = sorter === 'alpha-up';
+    sorter = (sorter === ('alpha-down' || 'alpha-up')) ? 'slug' : sorter;
+    let sortedSpell = spells.sort((a, b) => {
+      if (a[sorter] < b[sorter]) {
+        return -1;
+      }
+      if (a[sorter] > b[sorter]) {
+        return 1;
+      }
+      return 0;
+    });
+    return isAlphaUp ? sortedSpell.reverse() : sortedSpell;
+  }
   renderAllSpellsIntoColumns() {
-    const spellsToRender = (this.props.selectedFilters[this.props.spellTabName].classes.length) ?
+    let spellsToRender = (this.props.selectedFilters[this.props.tabName].classes.length) ?
       this.getFilteredSpells() : this.props.spells;
     const numberOfSpells = spellsToRender.length;
+    const selectedSorter = this.props.selectedSorter[this.props.tabName];
+    spellsToRender = (selectedSorter.length) ? this.sortSpells(selectedSorter, spellsToRender) : spellsToRender;
+    const requiresSorterHeaders = selectedSorter === ('level_int' || 'school');
     if (numberOfSpells > 0) {
       const maxSpellInColumn = 60;
       const numberOfColumns = Math.ceil(numberOfSpells / maxSpellInColumn);
       let AllSpellsColumns = [];
       for (let columnNum = 1; columnNum < numberOfColumns + 1; columnNum++) {
         let curSpellIndexMin = 0 + ((columnNum - 1) * maxSpellInColumn);
-        let curSpellIndexMax = (numberOfSpells < (columnNum * maxSpellInColumn))
+        let curSpellIndexMax = (numberOfSpells <= (columnNum * maxSpellInColumn))
           ? numberOfSpells : (columnNum * maxSpellInColumn) - 1;
         AllSpellsColumns.push(
           (<Grid.Column key={columnNum}>
-            {spellsToRender.slice(curSpellIndexMin, curSpellIndexMax).map((spell) => {
+            {spellsToRender.slice(curSpellIndexMin, curSpellIndexMax).map((spell, index) => {
+              let nextIndex = (curSpellIndexMin + index + 1 >= spellsToRender.length) ? spellsToRender.length - 1 : curSpellIndexMin + index + 1;
               return (
-              <List.Item key={this.props.spellTabName + "spells-" + spell.slug}>
-                <Popup wide='very' basic size='large' header={spell.name}
-                  content={<SpellDescription spell={spell} />}
-                  trigger={
-                    <Checkbox
-                      label={spell.name}
-                      checked={this.props.spellListMonitors.includes(spell)}
-                      onClick={() => this.props.selectSpellAction(spell)} />} />
-              </List.Item>)})}
+                <List.Item key={this.props.tabName + "-spells-" + spell.slug}>
+                  {(requiresSorterHeaders && selectedSorter.length &&
+                    (nextIndex === 1 || (spellsToRender[nextIndex - 1][selectedSorter] !== spellsToRender[nextIndex][selectedSorter]))) ?
+                    <h3 className='spellListHeader'>
+                      {(selectedSorter === 'level_int') ? spellsToRender[nextIndex].level : spellsToRender[nextIndex][selectedSorter]}
+                    </h3> : null}
+                  <Popup wide='very' basic size='large' header={spell.name}
+                    content={<SpellDescription spell={spell} />}
+                    trigger={
+                      <Checkbox
+                        label={spell.name}
+                        checked={this.props.spellListMonitors.includes(spell)}
+                        onClick={() => this.props.selectSpellAction(spell)} />} />
+                </List.Item>)
+            })}
           </Grid.Column>))
       }
       return <Grid className="spellListGrid" columns={numberOfColumns} stackable doubling>{AllSpellsColumns}</Grid>;
@@ -63,7 +87,8 @@ class SpellList extends Component {
 const mapStateToProps = (state) => {
   return {
     spellbookSpells: state.spellbookSpells,
-    selectedFilters: state.selectedFilters
+    selectedFilters: state.selectedFilters,
+    selectedSorter: state.selectedSorter
   };
 };
 
