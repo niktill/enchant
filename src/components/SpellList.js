@@ -13,7 +13,7 @@ class SpellList extends Component {
   }
   sortSpells(sorter, spells) {
     let isAlphaUp = sorter === 'alpha-up';
-    sorter = (sorter === ('alpha-down' || 'alpha-up')) ? 'slug' : sorter;
+    sorter = (sorter === 'alpha-down' || sorter === 'alpha-up') ? 'slug' : sorter;
     let sortedSpell = spells.sort((a, b) => {
       if (a[sorter] < b[sorter]) {
         return -1;
@@ -31,7 +31,7 @@ class SpellList extends Component {
     const numberOfSpells = spellsToRender.length;
     const selectedSorter = this.props.selectedSorter[this.props.tabName];
     spellsToRender = (selectedSorter.length) ? this.sortSpells(selectedSorter, spellsToRender) : spellsToRender;
-    const requiresSorterHeaders = selectedSorter === ('level_int' || 'school');
+    const requiresSorterHeaders = selectedSorter === 'level_int' || selectedSorter ==='school';
     if (numberOfSpells > 0) {
       const maxSpellInColumn = 60;
       const numberOfColumns = Math.ceil(numberOfSpells / maxSpellInColumn);
@@ -43,13 +43,13 @@ class SpellList extends Component {
         AllSpellsColumns.push(
           (<Grid.Column key={columnNum}>
             {spellsToRender.slice(curSpellIndexMin, curSpellIndexMax).map((spell, index) => {
-              let nextIndex = (curSpellIndexMin + index + 1 >= spellsToRender.length) ? spellsToRender.length - 1 : curSpellIndexMin + index + 1;
+              let curIndex = curSpellIndexMin + index;
               return (
                 <List.Item key={this.props.tabName + "-spells-" + spell.slug}>
                   {(requiresSorterHeaders && selectedSorter.length &&
-                    (nextIndex === 1 || (spellsToRender[nextIndex - 1][selectedSorter] !== spellsToRender[nextIndex][selectedSorter]))) ?
+                    (curIndex === 0 || (spellsToRender[curIndex - 1][selectedSorter] !== spellsToRender[curIndex][selectedSorter]))) ?
                     <h3 className='spellListHeader'>
-                      {(selectedSorter === 'level_int') ? spellsToRender[nextIndex].level : spellsToRender[nextIndex][selectedSorter]}
+                      {(selectedSorter === 'level_int') ? spellsToRender[curIndex].level : spellsToRender[curIndex][selectedSorter]}
                     </h3> : null}
                   <Popup wide='very' basic size='large' header={spell.name}
                     content={<SpellDescription spell={spell} />}
