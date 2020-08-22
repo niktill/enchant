@@ -36,7 +36,7 @@ class App extends Component {
   render() {
     return (
       <Dimmer.Dimmable dimmed={!this.props.apiData.complete}>
-        <Dimmer active={!this.props.apiData.complete && !this.props.apiData.error}><Loader size='massive' content={this.props.apiData.error} /></Dimmer>
+        <Dimmer active={!this.props.apiData.complete && !this.props.apiData.error}><Loader size='massive' content='Loading Enchant' /></Dimmer>
         {this.renderTabsOnFetchComplete()}
       </Dimmer.Dimmable>
     );

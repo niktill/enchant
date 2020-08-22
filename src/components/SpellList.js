@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { List, Checkbox, Grid, Message, Container, Popup } from "semantic-ui-react";
 import SpellDescription from './SpellDescription';
+import DailySpellListItem from './DailySpellListItem';
 import { selectAllSpellsSpell } from "../actions";
 
 class SpellList extends Component {
@@ -27,17 +28,11 @@ class SpellList extends Component {
   }
   renderSpellListItem(spell) {
     if (this.props.tabName === 'dailySpells') {
-      return (
-        <List.Item key={this.props.tabName + "-spells-" + spell.slug}>
-          <Popup wide='very' basic size='large' header={spell.name}
-            content={<SpellDescription spell={spell} />}
-            trigger={<p className='dailySpell'>{spell.name}</p>} />
-        </List.Item>
-      );;
+      return <DailySpellListItem key={this.props.tabName + "-spells-" + spell.slug} spell={spell}/>;
     }
     return (
       <List.Item key={this.props.tabName + "-spells-" + spell.slug}>
-        <Popup wide='very' basic size='large' header={spell.name}
+        <Popup wide='very' basic size='small' header={spell.name}
           content={<SpellDescription spell={spell} />}
           trigger={
             <Checkbox
@@ -71,9 +66,9 @@ class SpellList extends Component {
                 if (requiresSorterHeaders && selectedSorter.length &&
                   (curIndex === 0 || (spellsToRender[curIndex - 1][selectedSorter] !== spellsToRender[curIndex][selectedSorter]))) {
                   return ([
-                  <h3 className='spellListHeader' key={this.tabName + '-' + selectedSorter + '-header'}>
-                    {(selectedSorter === 'level_int') ? spellsToRender[curIndex].level : spellsToRender[curIndex][selectedSorter]}
-                  </h3>, this.renderSpellListItem(spell)])
+                    <h3 className='spellListHeader' key={this.tabName + '-' + selectedSorter + '-header'}>
+                      {(selectedSorter === 'level_int') ? spellsToRender[curIndex].level : spellsToRender[curIndex][selectedSorter]}
+                    </h3>, this.renderSpellListItem(spell)])
                 }
                 return this.renderSpellListItem(spell)
               })}

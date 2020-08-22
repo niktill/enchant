@@ -13,3 +13,11 @@
 #root, #root .dimmable {
     height: 100%;
 }
+
+.ui.selection.list .list>.item, .ui.selection.list>.item {
+    color: rgb(0, 0, 0) !important;
+}
+
+.daily-spell-modal {
+    margin: 20px;
+}

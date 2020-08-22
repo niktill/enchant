@@ -2,5 +2,5 @@ import axios from 'axios';
 
 export default axios.create({
     baseURL: 'https://api.open5e.com',
-    timeout: 10000
+    timeout: 7000
 });
