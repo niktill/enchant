@@ -13,12 +13,3 @@
 #root, #root .dimmable {
     height: 100%;
 }
-
-.spellListGrid h3.spellListHeader {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.spellListGrid .column .item:first-of-type .spellListHeader {
-    margin-top: 0rem;
-}

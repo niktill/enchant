@@ -25,13 +25,36 @@ class SpellList extends Component {
     });
     return isAlphaUp ? sortedSpell.reverse() : sortedSpell;
   }
+  renderSpellListItem(spell) {
+    if (this.props.tabName === 'dailySpells') {
+      return (
+        <List.Item key={this.props.tabName + "-spells-" + spell.slug}>
+          <Popup wide='very' basic size='large' header={spell.name}
+            content={<SpellDescription spell={spell} />}
+            trigger={<p className='dailySpell'>{spell.name}</p>} />
+        </List.Item>
+      );;
+    }
+    return (
+      <List.Item key={this.props.tabName + "-spells-" + spell.slug}>
+        <Popup wide='very' basic size='large' header={spell.name}
+          content={<SpellDescription spell={spell} />}
+          trigger={
+            <Checkbox
+              label={spell.name}
+              checked={this.props.spellListMonitors.includes(spell)}
+              onClick={() => this.props.selectSpellAction(spell)} />} />
+      </List.Item>
+    );
+  }
+
   renderAllSpellsIntoColumns() {
     let spellsToRender = (this.props.selectedFilters[this.props.tabName].classes.length) ?
       this.getFilteredSpells() : this.props.spells;
     const numberOfSpells = spellsToRender.length;
     const selectedSorter = this.props.selectedSorter[this.props.tabName];
     spellsToRender = (selectedSorter.length) ? this.sortSpells(selectedSorter, spellsToRender) : spellsToRender;
-    const requiresSorterHeaders = selectedSorter === 'level_int' || selectedSorter ==='school';
+    const requiresSorterHeaders = selectedSorter === 'level_int' || selectedSorter === 'school';
     if (numberOfSpells > 0) {
       const maxSpellInColumn = 60;
       const numberOfColumns = Math.ceil(numberOfSpells / maxSpellInColumn);
@@ -42,24 +65,19 @@ class SpellList extends Component {
           ? numberOfSpells : (columnNum * maxSpellInColumn) - 1;
         AllSpellsColumns.push(
           (<Grid.Column key={columnNum}>
-            {spellsToRender.slice(curSpellIndexMin, curSpellIndexMax).map((spell, index) => {
-              let curIndex = curSpellIndexMin + index;
-              return (
-                <List.Item key={this.props.tabName + "-spells-" + spell.slug}>
-                  {(requiresSorterHeaders && selectedSorter.length &&
-                    (curIndex === 0 || (spellsToRender[curIndex - 1][selectedSorter] !== spellsToRender[curIndex][selectedSorter]))) ?
-                    <h3 className='spellListHeader'>
-                      {(selectedSorter === 'level_int') ? spellsToRender[curIndex].level : spellsToRender[curIndex][selectedSorter]}
-                    </h3> : null}
-                  <Popup wide='very' basic size='large' header={spell.name}
-                    content={<SpellDescription spell={spell} />}
-                    trigger={
-                      <Checkbox
-                        label={spell.name}
-                        checked={this.props.spellListMonitors.includes(spell)}
-                        onClick={() => this.props.selectSpellAction(spell)} />} />
-                </List.Item>)
-            })}
+            <List selection={this.props.tabName === 'dailySpells'}>
+              {spellsToRender.slice(curSpellIndexMin, curSpellIndexMax).map((spell, index) => {
+                let curIndex = curSpellIndexMin + index;
+                if (requiresSorterHeaders && selectedSorter.length &&
+                  (curIndex === 0 || (spellsToRender[curIndex - 1][selectedSorter] !== spellsToRender[curIndex][selectedSorter]))) {
+                  return ([
+                  <h3 className='spellListHeader' key={this.tabName + '-' + selectedSorter + '-header'}>
+                    {(selectedSorter === 'level_int') ? spellsToRender[curIndex].level : spellsToRender[curIndex][selectedSorter]}
+                  </h3>, this.renderSpellListItem(spell)])
+                }
+                return this.renderSpellListItem(spell)
+              })}
+            </List>
           </Grid.Column>))
       }
       return <Grid className="spellListGrid" columns={numberOfColumns} stackable doubling>{AllSpellsColumns}</Grid>;
@@ -68,9 +86,9 @@ class SpellList extends Component {
         <Container textAlign='center'>
           <Message compact>
             <Message.Header>No Spells Available</Message.Header>
-            <p>{(this.props.spells.length === 0) ?
-              'This spellbook is empty! Select spells in the All Spells tab to add to this spellbook.' :
-              'There are no spells defined by the filters selected.'}
+            <p>{(this.props.tabName === 'dailySpells') ?
+              'You have not selected any daily spells! Please select your daily spells from the Spell Book tab.' :
+              'This spellbook is empty! Select spells in the All Spells tab to add to this spellbook.'}
             </p>
           </Message>
         </Container>)

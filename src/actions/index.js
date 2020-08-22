@@ -22,6 +22,7 @@ export const fetchAPIData = () => async (dispatch) => {
         dispatch({ type: 'API_DATA_FETCHED', payload: data });
     } catch(err) {
         console.log(err);
+        dispatch({ type: 'API_DATA_ERROR' });
     }
 };
 

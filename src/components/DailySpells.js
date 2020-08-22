@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { List } from "semantic-ui-react";
+import FilterSpells from './FilterSpells';
+import SortSpells from './SortSpells';
+import SpellList from './SpellList';
 
 class DailySpells extends Component {
   renderSpellbookList() {
@@ -12,7 +15,14 @@ class DailySpells extends Component {
   }
 
   render() {
-    return <List>{this.renderSpellbookList()}</List>;
+    return (
+      <div>
+        <FilterSpells tabName='dailySpells' />
+        <SortSpells tabName='dailySpells' />
+        <SpellList tabName='dailySpells'
+          spells={this.props.dailySpells}
+          selectSpellAction={spell => false} />
+      </div>);
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Tab, Loader, Dimmer, Segment } from "semantic-ui-react";
+import { Tab, Loader, Dimmer, Message, Container } from "semantic-ui-react";
 import Spellbook from "./Spellbook";
 import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
@@ -11,15 +11,33 @@ class App extends Component {
     this.props.fetchAPIData();
   };
 
-  render() {
-    return (
-      <Dimmer.Dimmable dimmed={!this.props.apiData.complete}>
-        <Dimmer active={!this.props.apiData.complete}><Loader size='massive' content='Loading Spells' /></Dimmer>
+  renderTabsOnFetchComplete() {
+    if (this.props.apiData.complete) {
+      return (
         <Tab id='appTab' panes={[
           { menuItem: 'Daily Spells', render: () => <Tab.Pane><DailySpells /></Tab.Pane> },
           { menuItem: 'Spell Book', render: () => <Tab.Pane><Spellbook /></Tab.Pane> },
           { menuItem: 'All Spells', render: () => <Tab.Pane><AllSpells /></Tab.Pane> }
-        ]} />
+        ]} />);
+    } else if (this.props.apiData.error) {
+      return (
+        <Container textAlign='center' style={{marginTop: '25vh'}}>
+          <Message size='large' compact negative>
+            <Message.Header>Error in retrieving spells from Open5e</Message.Header>
+            <p>Please reload to try again.</p>
+          </Message>
+        </Container>
+
+      );
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <Dimmer.Dimmable dimmed={!this.props.apiData.complete}>
+        <Dimmer active={!this.props.apiData.complete && !this.props.apiData.error}><Loader size='massive' content={this.props.apiData.error} /></Dimmer>
+        {this.renderTabsOnFetchComplete()}
       </Dimmer.Dimmable>
     );
   }
