@@ -6,7 +6,7 @@ const fetchAPIDataReducer = (apiData = {}, action) => {
         apiData = action.payload;
         apiData.complete = 1;
     } else if (action.type === 'API_DATA_ERROR') {
-        apiData = {...apiData, error: 1};
+        apiData = { ...apiData, error: 1 };
     }
     return apiData;
 };
@@ -14,7 +14,7 @@ const fetchAPIDataReducer = (apiData = {}, action) => {
 // Reducer that manages spells in spell book
 const spellbookSpellsReducer = (spellBookSpells = [], action) => {
     if (action.type === 'ALL_SPELLS_SPELL_SELECT') {
-        if (spellBookSpells.includes(action.payload)){
+        if (spellBookSpells.includes(action.payload)) {
             return spellBookSpells.filter(spell => spell.slug !== action.payload.slug);
         }
         return [...spellBookSpells, action.payload]
@@ -58,9 +58,9 @@ const selectFilterReducer = (spellFilters = filterDefault, action) => {
 
 //Reducer that manages spell sorting for different tabs
 const sortDefault = {
-    dailySpells: 'alpha-down',
-    spellBookSpells: 'alpha-down',
-    allSpells: 'alpha-down'
+    dailySpells: 'level_int',
+    spellBookSpells: 'level_int',
+    allSpells: 'level_int'
 }
 const selectSortingReducer = (spellSorters = sortDefault, action) => {
     if (action.type === 'SORT_SPELLS_SELECT') {
@@ -69,10 +69,25 @@ const selectSortingReducer = (spellSorters = sortDefault, action) => {
     return spellSorters;
 };
 
+// Reducer for spells slots used
+// format of spellSlotsDefault array: index = spell level (0 is cantrips), 
+// each sub-array element in array is [currentSpellSlots, maxSpellSlot] 
+// (e.g. spellSlotsDefault[1][0] = current spell slots left for 1st level spells)
+const spellSlotsDefault = [[0,0],[1,1],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+const spellSlotsReducer = (spellSlots = spellSlotsDefault, action) => {
+    if (action.type === 'REFILL_ALL_SPELL_SLOTS') {
+        return spellSlotsDefault.map(el => el[0] = el[1]);
+    } else if (action.type === 'CAST_SPELL') {
+        return spellSlotsDefault.map(el => el[1] === action.payload.spellLevel ? [el[0] - 1, el[1]] : el);
+    }
+    return spellSlots;
+};
+
 export default combineReducers({
     apiData: fetchAPIDataReducer,
     spellbookSpells: spellbookSpellsReducer,
     dailySpells: dailySpellsReducer,
     selectedFilters: selectFilterReducer,
-    selectedSorter: selectSortingReducer
+    selectedSorter: selectSortingReducer,
+    spellSlots: spellSlotsReducer
 });

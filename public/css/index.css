@@ -21,3 +21,7 @@
 .daily-spell-modal {
     margin: 20px;
 }
+
+.actions .message.negative {
+    margin-bottom: 0px;
+}

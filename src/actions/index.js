@@ -57,3 +57,11 @@ export const selectSortSpellLevel = (sorterName, tabName) => {
         payload: {sorterName: sorterName, tabName: tabName}
     };
 };
+
+// Cast spell from Daily Spells Tab
+export const castSpell = (spellLevel) => {
+    return {
+        type: 'CAST_SPELL',
+        payload: {spellLevel: spellLevel}
+    };
+};

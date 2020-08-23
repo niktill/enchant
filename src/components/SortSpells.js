@@ -21,6 +21,7 @@ class SortSpells extends Component {
     return (
       <Popup hoverable on={['click']}
         content={<Button.Group>
+          {this.renderClassSpellSortButtons()}
           <Button icon
             active={this.props.selectedSorter[this.props.tabName] === 'alpha-down'}
             onClick={() => this.props.selectSortSpellLevel('alpha-down', this.props.tabName)}>
@@ -31,7 +32,6 @@ class SortSpells extends Component {
             onClick={() => this.props.selectSortSpellLevel('alpha-up', this.props.tabName)}>
             <Icon name='sort alphabet up' />
           </Button>
-          {this.renderClassSpellSortButtons()}
         </Button.Group>}
         trigger={<Button>Sort</Button>} />
     )

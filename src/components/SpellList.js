@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { List, Checkbox, Grid, Message, Container, Popup } from "semantic-ui-react";
+import { List, Checkbox, Grid, Message, Container, Popup, Segment } from "semantic-ui-react";
 import SpellDescription from './SpellDescription';
 import DailySpellListItem from './DailySpellListItem';
 import { selectAllSpellsSpell } from "../actions";
@@ -63,7 +63,7 @@ class SpellList extends Component {
             <List selection={this.props.tabName === 'dailySpells'}>
               {spellsToRender.slice(curSpellIndexMin, curSpellIndexMax).map((spell, index) => {
                 let curIndex = curSpellIndexMin + index;
-                if (requiresSorterHeaders && selectedSorter.length &&
+                if (requiresSorterHeaders &&
                   (curIndex === 0 || (spellsToRender[curIndex - 1][selectedSorter] !== spellsToRender[curIndex][selectedSorter]))) {
                   return ([
                     <h3 className='spellListHeader' key={this.tabName + '-' + selectedSorter + '-header'}>
@@ -92,7 +92,9 @@ class SpellList extends Component {
 
   render() {
     return (
-      this.renderAllSpellsIntoColumns()
+      <Segment>
+        {this.renderAllSpellsIntoColumns()}
+      </Segment>
     )
   }
 }
