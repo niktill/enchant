@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { List, Modal, Popup, Button, Message, Container } from "semantic-ui-react";
+import { List, Modal, Popup } from "semantic-ui-react";
 import SpellDescription from './SpellDescription';
 import { castSpell } from '../actions';
 
 class DailySpellListItem extends Component {
     castSpell(spellLevel) {
-        if (this.props.spellSlots[spellLevel][0] > 0) {
+        if (spellLevel !== 0 && this.props.spellSlots[spellLevel - 1][0] > 0 ) {
             this.props.castSpell(spellLevel)
         }
     }
@@ -17,7 +17,7 @@ class DailySpellListItem extends Component {
                     <List.Item>
                         <Popup wide='very' basic size='small' header={this.props.spell.name}
                             content={<SpellDescription spell={this.props.spell} />}
-                            trigger={<p>{this.props.spell.name}</p>} />
+                            trigger={<p className='dailySpellName'>{this.props.spell.name}</p>} />
                     </List.Item>}
                 header={this.props.spell.name}
                 content={
@@ -26,14 +26,15 @@ class DailySpellListItem extends Component {
 
                     </div>}
                 actions={[
-                    <p size='small' style={{
+                    (this.props.spell.level_int !== 0) ?
+                    <p key='-cast-message' size='small' style={{
                         'display': 'inline',
-                        'color': (this.props.spellSlots[this.props.spell.level_int][0] === 0) ? 'red' : ''
+                        'color': (this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ? 'red' : ''
                     }}>
-                        {(this.props.spellSlots[this.props.spell.level_int][0] === 0) ?
+                        {(this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ?
                             'You have used all of your daily ' + this.props.spell.level + ' spell slots!' :
-                            this.props.spell.level + ' spell slots available: ' + this.props.spellSlots[this.props.spell.level_int][0]}
-                    </p>,
+                            this.props.spell.level + ' spell slots available: ' + this.props.spellSlots[this.props.spell.level_int - 1][0]}
+                    </p> : null,
                     {
                         key: 'cast-spell',
                         content: 'Cast Spell',
@@ -41,7 +42,7 @@ class DailySpellListItem extends Component {
                         icon: 'magic',
                         onClick: () => this.castSpell(this.props.spell.level_int),
                         positive: true,
-                        disabled: this.props.spellSlots[this.props.spell.level_int][0] <= 0
+                        disabled: this.props.spell.level_int !== 0 && this.props.spellSlots[this.props.spell.level_int - 1][0] <= 0
                     }]} />
         );
     }

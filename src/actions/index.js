@@ -65,3 +65,21 @@ export const castSpell = (spellLevel) => {
         payload: {spellLevel: spellLevel}
     };
 };
+
+// Refill spell slots on Daily Spells Tab
+export const refillSpellSlots = () => {
+    return {
+        type: 'REFILL_SPELL_SLOTS'
+    };
+};
+
+// Set max spell slots on Daily Spells Tab
+export const setMaxSpellSlots = (spellLevel, maxSpellSlots) => {
+    if (!maxSpellSlots) {
+        maxSpellSlots = 0;
+    }
+    return {
+        type: 'SET_MAX_SPELL_SLOTS',
+        payload: {spellLevel: spellLevel, maxSpellSlots: maxSpellSlots}
+    };
+};

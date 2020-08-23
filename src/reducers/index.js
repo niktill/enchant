@@ -70,15 +70,23 @@ const selectSortingReducer = (spellSorters = sortDefault, action) => {
 };
 
 // Reducer for spells slots used
-// format of spellSlotsDefault array: index = spell level (0 is cantrips), 
+// format of spellSlotsDefault array: index + 1 = spell level, 
 // each sub-array element in array is [currentSpellSlots, maxSpellSlot] 
-// (e.g. spellSlotsDefault[1][0] = current spell slots left for 1st level spells)
-const spellSlotsDefault = [[0,0],[1,1],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+// (e.g. spellSlotsDefault[0][0] = current spell slots left for 1st level spells)
+const spellSlotsDefault = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
 const spellSlotsReducer = (spellSlots = spellSlotsDefault, action) => {
-    if (action.type === 'REFILL_ALL_SPELL_SLOTS') {
-        return spellSlotsDefault.map(el => el[0] = el[1]);
+    if (action.type === 'REFILL_SPELL_SLOTS') {
+        console.log(spellSlots.map(el => [el[1], el[1]]));
+        return spellSlots.map(el => [el[1], el[1]]);
     } else if (action.type === 'CAST_SPELL') {
-        return spellSlotsDefault.map(el => el[1] === action.payload.spellLevel ? [el[0] - 1, el[1]] : el);
+        return spellSlots.map((el, index) => index + 1 === action.payload.spellLevel ? [el[0] - 1, el[1]] : el);
+    } else if (action.type === 'SET_MAX_SPELL_SLOTS') {
+        const newCurSpellSlots = (spellSlots[action.payload.spellLevel - 1][0] > action.payload.maxSpellSlots) ?
+            action.payload.maxSpellSlots : spellSlots[action.payload.spellLevel - 1][0]
+            console.log(spellSlots.map((el, index) => index + 1 === action.payload.spellLevel ?
+            [newCurSpellSlots, action.payload.maxSpellSlots] : el));
+        return spellSlots.map((el, index) => ((index + 1) === action.payload.spellLevel) ?
+            [newCurSpellSlots, action.payload.maxSpellSlots] : el);
     }
     return spellSlots;
 };

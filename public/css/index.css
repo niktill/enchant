@@ -23,5 +23,18 @@
 }
 
 .actions .message.negative {
-    margin-bottom: 0px;
+    margin-bottom: 0;
+}
+
+.ui.tab .ui.segment .column {
+    padding-top: 0;
+}
+
+.list .item .dailySpellName {
+    font-size: 16px;
+}
+
+.setSpellSlotMax {
+    max-width: 50px;
+    display: inline;
 }
