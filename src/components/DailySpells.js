@@ -9,9 +9,9 @@ class DailySpells extends Component {
   render() {
     return (
       <div>
+        <SpellSlots />
         <FilterSpells tabName='dailySpells' />
         <SortSpells tabName='dailySpells' />
-        <SpellSlots />
         <SpellList tabName='dailySpells'
           spells={this.props.dailySpells}
           selectSpellAction={spell => false} />

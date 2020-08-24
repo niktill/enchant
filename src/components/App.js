@@ -4,6 +4,7 @@ import { Tab, Loader, Dimmer, Message, Container } from "semantic-ui-react";
 import Spellbook from "./Spellbook";
 import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
+import Login from "./Login";
 import { fetchAPIData } from "../actions"
 
 class App extends Component {
@@ -17,7 +18,9 @@ class App extends Component {
         <Tab id='appTab' panes={[
           { menuItem: 'Daily Spells', render: () => <Tab.Pane><DailySpells /></Tab.Pane> },
           { menuItem: 'Spell Book', render: () => <Tab.Pane><Spellbook /></Tab.Pane> },
-          { menuItem: 'All Spells', render: () => <Tab.Pane><AllSpells /></Tab.Pane> }
+          { menuItem: 'All Spells', render: () => <Tab.Pane><AllSpells /></Tab.Pane> },
+          { menuItem: { id:'help-tab', key: 'help', icon: 'help circle', href: 'https://www.google.com' }},
+          { menuItem: { id:'login-tab', key: 'login', icon: 'user', content: 'Log In' }, render: () => <Tab.Pane><Login /></Tab.Pane> }
         ]} />);
     } else if (this.props.apiData.error) {
       return (

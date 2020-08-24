@@ -11,9 +11,9 @@ class SpellSlots extends Component {
     }
     render() {
         return (
-            <div>
-                <Header as='h3'>Spell Slots:</Header>
-                <Button content='Refill Spell Slots' onClick={ () => this.props.refillSpellSlots()}/>
+            <div style={{'marginBottom': '10px'}}>
+                <Header as='h3' style={{'display': 'inline-block', 'marginRight': '10px'}}>Spell Slots:</Header>
+                <Button content='Refill Spell Slots' onClick={() => this.props.refillSpellSlots()} />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
@@ -23,12 +23,12 @@ class SpellSlots extends Component {
                     </Table.Header>
                     <Table.Body>
                         <Table.Row>
-                            {this.props.spellSlots.map( (el, index) => 
-                            <Table.Cell key={index}>
-                                {el[0] + ' / '}
-                                <Input size='mini' className='setSpellSlotMax' type='number' min='0' 
-                                 value={el[1]}
-                                 onChange={(event, data) => this.props.setMaxSpellSlots(index + 1, parseInt(data.value)) }/>
+                            {this.props.spellSlots.map((el, index) =>
+                                <Table.Cell key={index}>
+                                    {el[0] + ' / '}
+                                    <Input size='mini' className='setSpellSlotMax' type='number' min='0'
+                                        value={el[1]}
+                                        onChange={(event, data) => this.props.setMaxSpellSlots(index + 1, parseInt(data.value))} />
                                 </Table.Cell>)}
                         </Table.Row>
                     </Table.Body>
