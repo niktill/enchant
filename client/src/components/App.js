@@ -19,7 +19,7 @@ class App extends Component {
           { menuItem: 'Daily Spells', render: () => <Tab.Pane><DailySpells /></Tab.Pane> },
           { menuItem: 'Spell Book', render: () => <Tab.Pane><Spellbook /></Tab.Pane> },
           { menuItem: 'All Spells', render: () => <Tab.Pane><AllSpells /></Tab.Pane> },
-          { menuItem: { id:'help-tab', key: 'help', icon: 'help circle', href: 'https://www.google.com' }},
+          { menuItem: { id:'help-tab', key: 'help', icon: 'help circle', href: 'https://www.google.com', target: '_blank' }},
           { menuItem: { id:'login-tab', key: 'login', icon: 'user', content: 'Log In' }, render: () => <Tab.Pane><Login /></Tab.Pane> }
         ]} />);
     } else if (this.props.apiData.error) {
