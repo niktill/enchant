@@ -42,7 +42,7 @@ class Login extends Component {
                             </Container>}
                         actions={[{ key: 'create-account', content: 'Create Account', color: 'blue' }]} />
                 </Form>
-                <Message textAlign='center'>
+                <Message>
                     Log in Message
                 </Message>
             </Segment >

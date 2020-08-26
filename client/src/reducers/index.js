@@ -82,7 +82,6 @@ const spellSlotsReducer = (spellSlots = spellSlotsDefault, action) => {
     } else if (action.type === 'SET_MAX_SPELL_SLOTS') {
         const newCurSpellSlots = (spellSlots[action.payload.spellLevel - 1][0] > action.payload.maxSpellSlots) ?
             action.payload.maxSpellSlots : spellSlots[action.payload.spellLevel - 1][0]
-            [newCurSpellSlots, action.payload.maxSpellSlots] : el));
         return spellSlots.map((el, index) => ((index + 1) === action.payload.spellLevel) ?
             [newCurSpellSlots, action.payload.maxSpellSlots] : el);
     }
