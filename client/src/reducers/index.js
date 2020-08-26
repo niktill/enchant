@@ -76,14 +76,12 @@ const selectSortingReducer = (spellSorters = sortDefault, action) => {
 const spellSlotsDefault = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
 const spellSlotsReducer = (spellSlots = spellSlotsDefault, action) => {
     if (action.type === 'REFILL_SPELL_SLOTS') {
-        console.log(spellSlots.map(el => [el[1], el[1]]));
         return spellSlots.map(el => [el[1], el[1]]);
     } else if (action.type === 'CAST_SPELL') {
         return spellSlots.map((el, index) => index + 1 === action.payload.spellLevel ? [el[0] - 1, el[1]] : el);
     } else if (action.type === 'SET_MAX_SPELL_SLOTS') {
         const newCurSpellSlots = (spellSlots[action.payload.spellLevel - 1][0] > action.payload.maxSpellSlots) ?
             action.payload.maxSpellSlots : spellSlots[action.payload.spellLevel - 1][0]
-            console.log(spellSlots.map((el, index) => index + 1 === action.payload.spellLevel ?
             [newCurSpellSlots, action.payload.maxSpellSlots] : el));
         return spellSlots.map((el, index) => ((index + 1) === action.payload.spellLevel) ?
             [newCurSpellSlots, action.payload.maxSpellSlots] : el);
