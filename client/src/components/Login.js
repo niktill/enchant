@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Segment, Form, Button, Input, Modal, Container, Message } from "semantic-ui-react";
+import { Segment, Form, Button, Input, Modal, Container, Message, Icon } from "semantic-ui-react";
 import { setMaxSpellSlots, refillSpellSlots } from "../actions";
 
 class Login extends Component {
@@ -19,7 +19,7 @@ class Login extends Component {
                     <Button type='submit'>Log In</Button>
                     <Modal
                         trigger={
-                            <Button floated='right' basic color='blue' onClick={(event)=>{event.preventDefault()}}>
+                            <Button floated='right' basic color='blue' onClick={(event) => { event.preventDefault() }}>
                                 Create account
                             </Button>}
                         header='Create Account'
@@ -42,6 +42,10 @@ class Login extends Component {
                             </Container>}
                         actions={[{ key: 'create-account', content: 'Create Account', color: 'blue' }]} />
                 </Form>
+                <Button style={{ 'marginTop': '10px' }} color='red' href='/auth/google'>
+                    <Icon name='google' />
+                    Sign in with Google
+                </Button>
                 <Message>
                     Log in Message
                 </Message>

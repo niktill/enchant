@@ -12,9 +12,9 @@ class SpellSlots extends Component {
     render() {
         return (
             <div style={{'marginBottom': '10px'}}>
-                <Header as='h3' style={{'display': 'inline-block', 'marginRight': '10px'}}>Spell Slots:</Header>
+                <Header as='h2' style={{'display': 'block', 'text-align': 'center'}}>Spell Slots</Header>
                 <Button content='Refill Spell Slots' onClick={() => this.props.refillSpellSlots()} />
-                <Table celled>
+                <Table celled style={{'marginBottom': '20px'}}>
                     <Table.Header>
                         <Table.Row>
                             {this.spellSlotHeaders.map(el =>

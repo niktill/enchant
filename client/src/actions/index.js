@@ -1,4 +1,15 @@
+import axios from 'axios';
 import dnd5eapi from '../apis/dnd5eapi';
+
+// Check if current user is logged in
+export const getCurrentUser = () => async (dispatch) => {
+    try {
+        const res = await axios.get('/api/current_user');
+        dispatch({type: 'FETCH_USER', payload: res.data});
+    } catch(err) {
+        console.log(err);
+    }
+}
 
 // Fetch API data Action Creator
 export const fetchAPIData = () => async (dispatch) => {

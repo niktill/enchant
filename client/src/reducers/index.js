@@ -11,6 +11,14 @@ const fetchAPIDataReducer = (apiData = {}, action) => {
     return apiData;
 };
 
+// reducer to help determine if user is logged in
+const authReducer = (user=null, action) => {
+    if (action.type === 'FETCH_USER') {
+        return action.payload || false;
+    }
+    return user;
+};
+
 // Reducer that manages spells in spell book
 const spellbookSpellsReducer = (spellBookSpells = [], action) => {
     if (action.type === 'ALL_SPELLS_SPELL_SELECT') {
@@ -94,5 +102,6 @@ export default combineReducers({
     dailySpells: dailySpellsReducer,
     selectedFilters: selectFilterReducer,
     selectedSorter: selectSortingReducer,
-    spellSlots: spellSlotsReducer
+    spellSlots: spellSlotsReducer,
+    currentUser: authReducer
 });

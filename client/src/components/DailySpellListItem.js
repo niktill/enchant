@@ -6,7 +6,7 @@ import { castSpell } from '../actions';
 
 class DailySpellListItem extends Component {
     castSpell(spellLevel) {
-        if (spellLevel !== 0 && this.props.spellSlots[spellLevel - 1][0] > 0 ) {
+        if (spellLevel !== 0 && this.props.spellSlots[spellLevel - 1][0] > 0) {
             this.props.castSpell(spellLevel)
         }
     }
@@ -27,14 +27,14 @@ class DailySpellListItem extends Component {
                     </div>}
                 actions={[
                     (this.props.spell.level_int !== 0) ?
-                    <p key='-cast-message' size='small' style={{
-                        'display': 'inline',
-                        'color': (this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ? 'red' : ''
-                    }}>
-                        {(this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ?
-                            'You have used all of your daily ' + this.props.spell.level + ' spell slots!' :
-                            this.props.spell.level + ' spell slots available: ' + this.props.spellSlots[this.props.spell.level_int - 1][0]}
-                    </p> : null,
+                        <p key='-cast-message' size='small' style={{
+                            'display': 'inline',
+                            'color': (this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ? 'red' : ''
+                        }}>
+                            {(this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ?
+                                'You have used all of your daily ' + this.props.spell.level + ' spell slots!' :
+                                this.props.spell.level + ' spell slots available: ' + this.props.spellSlots[this.props.spell.level_int - 1][0]}
+                        </p> : null,
                     {
                         key: 'cast-spell',
                         content: 'Cast Spell',
