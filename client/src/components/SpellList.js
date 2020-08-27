@@ -37,7 +37,7 @@ class SpellList extends Component {
           trigger={
             <Checkbox
               label={spell.name}
-              checked={this.props.spellListMonitors.includes(spell)}
+              checked={this.props.spellListMonitors.some( el => el.slug === spell.slug)}
               onClick={() => this.props.selectSpellAction(spell)} />} />
       </List.Item>
     );

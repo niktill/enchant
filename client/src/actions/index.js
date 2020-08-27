@@ -46,11 +46,22 @@ export const selectSpellbookSpell = (spell) => {
 };
 
 // Add Spell to Spellbook Action Creator
-export const selectAllSpellsSpell = (spell) => {
-    return {
-        type: 'ALL_SPELLS_SPELL_SELECT',
-        payload: spell
-    };
+export const selectAllSpellsSpell = (spell) => async (dispatch, getState) => {
+    const { currentUser, spellbookSpells } = getState();
+    if (currentUser) {
+        const currentUserSpellBook = spellbookSpells;
+        const newSpellBookSpells = currentUserSpellBook.some( el => el.slug === spell.slug) ?
+        currentUserSpellBook.filter(spellInBook => spellInBook.slug !== spell.slug) : [...currentUserSpellBook, spell];
+
+        const updateSpellBookSpells = await axios.post('/api/current_user/spellbookspells', {spellBookSpells: newSpellBookSpells});
+        if (updateSpellBookSpells.status === 200) {
+            dispatch({type: 'ALL_SPELLS_SPELL_SELECT', payload: spell});
+        } else {
+            console.log('ERROR IN UPDATING SPELLBOOK');
+        }
+    } else {
+        dispatch({type: 'ALL_SPELLS_SPELL_SELECT', payload: spell});
+    }
 };
 
 // Filter Spells by Dnd Class Action Creator

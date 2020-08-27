@@ -21,11 +21,16 @@ const authReducer = (user=null, action) => {
 
 // Reducer that manages spells in spell book
 const spellbookSpellsReducer = (spellBookSpells = [], action) => {
+    if (action.type === 'FETCH_USER') {
+        if (action.payload.spellBookSpells.length) {
+            return [...action.payload.spellBookSpells];
+        }
+    }
     if (action.type === 'ALL_SPELLS_SPELL_SELECT') {
-        if (spellBookSpells.includes(action.payload)) {
+        if (spellBookSpells.some( spell => spell.slug === action.payload.slug)) {
             return spellBookSpells.filter(spell => spell.slug !== action.payload.slug);
         }
-        return [...spellBookSpells, action.payload]
+        return [...spellBookSpells, action.payload];
     }
     return spellBookSpells;
 };
@@ -33,7 +38,7 @@ const spellbookSpellsReducer = (spellBookSpells = [], action) => {
 // Reducer that manages daily spells
 const dailySpellsReducer = (dailySpells = [], action) => {
     if (action.type === 'SPELLBOOK_SPELL_SELECT') {
-        if (dailySpells.includes(action.payload)) {
+        if (dailySpells.some( spell => spell.slug === action.payload.slug)) {
             return dailySpells.filter(spell => spell.slug !== action.payload.slug);
         }
         return [...dailySpells, action.payload];
