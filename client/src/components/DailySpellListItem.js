@@ -32,7 +32,7 @@ class DailySpellListItem extends Component {
                             'color': (this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ? 'red' : ''
                         }}>
                             {(this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ?
-                                'You have used all of your daily ' + this.props.spell.level + ' spell slots!' :
+                                'You have no available daily ' + this.props.spell.level + ' spell slots!' :
                                 this.props.spell.level + ' spell slots available: ' + this.props.spellSlots[this.props.spell.level_int - 1][0]}
                         </p> : null,
                     {

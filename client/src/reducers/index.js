@@ -22,11 +22,11 @@ const authReducer = (user=null, action) => {
 // Reducer that manages spells in spell book
 const spellbookSpellsReducer = (spellBookSpells = [], action) => {
     if (action.type === 'FETCH_USER') {
-        if (action.payload.spellBookSpells.length) {
+        if (action.payload.spellBookSpells) {
             return [...action.payload.spellBookSpells];
         }
     }
-    if (action.type === 'ALL_SPELLS_SPELL_SELECT') {
+    else if (action.type === 'ALL_SPELLS_SPELL_SELECT') {
         if (spellBookSpells.some( spell => spell.slug === action.payload.slug)) {
             return spellBookSpells.filter(spell => spell.slug !== action.payload.slug);
         }
@@ -37,7 +37,12 @@ const spellbookSpellsReducer = (spellBookSpells = [], action) => {
 
 // Reducer that manages daily spells
 const dailySpellsReducer = (dailySpells = [], action) => {
-    if (action.type === 'SPELLBOOK_SPELL_SELECT') {
+    if (action.type === 'FETCH_USER') {
+        if (action.payload.dailySpells) {
+            return [...action.payload.dailySpells];
+        }
+    }
+    else if (action.type === 'SPELLBOOK_SPELL_SELECT') {
         if (dailySpells.some( spell => spell.slug === action.payload.slug)) {
             return dailySpells.filter(spell => spell.slug !== action.payload.slug);
         }
@@ -88,7 +93,11 @@ const selectSortingReducer = (spellSorters = sortDefault, action) => {
 // (e.g. spellSlotsDefault[0][0] = current spell slots left for 1st level spells)
 const spellSlotsDefault = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
 const spellSlotsReducer = (spellSlots = spellSlotsDefault, action) => {
-    if (action.type === 'REFILL_SPELL_SLOTS') {
+    if (action.type === 'FETCH_USER') {
+        if (action.payload.spellSlots) {
+            return action.payload.spellSlots;
+        }
+    } else if (action.type === 'REFILL_SPELL_SLOTS') {
         return spellSlots.map(el => [el[1], el[1]]);
     } else if (action.type === 'CAST_SPELL') {
         return spellSlots.map((el, index) => index + 1 === action.payload.spellLevel ? [el[0] - 1, el[1]] : el);

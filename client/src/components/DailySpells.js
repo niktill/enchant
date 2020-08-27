@@ -13,8 +13,7 @@ class DailySpells extends Component {
         <FilterSpells tabName='dailySpells' />
         <SortSpells tabName='dailySpells' />
         <SpellList tabName='dailySpells'
-          spells={this.props.dailySpells}
-          selectSpellAction={spell => false} />
+          spells={this.props.dailySpells} />
       </div>);
   }
 }

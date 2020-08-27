@@ -28,7 +28,7 @@ module.exports = (app) => {
             res.send(400);
         }
     });
-
+    // Daily Spells Routes
     app.get('/api/current_user/dailyspells', async (req, res) => {
         if (req.user) {
             const user = await User.findById(req.user.id);
@@ -41,6 +41,19 @@ module.exports = (app) => {
             res.send(404);
         }
     });
+    app.post('/api/current_user/dailyspells', async (req, res) => {
+        if (req.user) {
+            const user = await User.findByIdAndUpdate(req.user.id, {dailySpells: req.body.dailySpells});
+            if (user) {
+                res.send(200);
+            } else {
+                res.send(400);
+            }
+        } else {
+            res.send(400);
+        }
+    });
+
     app.get('/api/current_user/spellslots', async (req, res) => {
         if (req.user) {
             const user = await User.findById(req.user.id);
@@ -51,6 +64,19 @@ module.exports = (app) => {
             }
         } else {
             res.send(404);
+        }
+    });
+
+    app.post('/api/current_user/spellslots', async (req, res) => {
+        if (req.user) {
+            const user = await User.findByIdAndUpdate(req.user.id, {spellSlots: req.body.spellSlots});
+            if (user) {
+                res.send(200);
+            } else {
+                res.send(400);
+            }
+        } else {
+            res.send(400);
         }
     });
 }
