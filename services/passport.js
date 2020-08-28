@@ -36,8 +36,8 @@ passport.use(
 );
 
 passport.use(new FacebookStrategy({
-    clientID: '368823097849315',
-    clientSecret: '79df70aa7c6526a576aa6384708e48b7',
+    clientID: keys.facebookAppID,
+    clientSecret: keys.facebookAppSecret,
     callbackURL: '/auth/facebook/callback',
     proxy: true,
     profileFields: ['id']
