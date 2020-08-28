@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
     googleId: String,
+    facebookId: String,
     spellBookSpells: Array,
     dailySpells: Array,
     spellSlots: {

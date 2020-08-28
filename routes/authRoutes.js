@@ -3,7 +3,7 @@ const passport = require('passport');
 module.exports = (app) => {
     app.get('/auth/google',
         passport.authenticate('google', {
-            scope: ['email', 'profile']
+            scope: ['profile']
         })
     );
 
@@ -11,11 +11,19 @@ module.exports = (app) => {
         res.redirect('/');
     });
 
+    app.get('/auth/facebook',
+        passport.authenticate('facebook')
+    );
+
+    app.get('/auth/facebook/callback', passport.authenticate('facebook'), (req, res) => {
+        res.redirect('/');
+    });
+
     app.get('/api/current_user', (req, res) => {
         if (req.user) {
             res.send(req.user);
         } else {
-            res.send(404);
+            res.sendStatus(404);
         }
     });
 

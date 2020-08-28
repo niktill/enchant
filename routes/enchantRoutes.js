@@ -54,6 +54,7 @@ module.exports = (app) => {
         }
     });
 
+    // Spell Slots Routes
     app.get('/api/current_user/spellslots', async (req, res) => {
         if (req.user) {
             const user = await User.findById(req.user.id);

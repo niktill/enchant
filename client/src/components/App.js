@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Loader, Dimmer, Message, Container, Menu, Segment } from "semantic-ui-react";
+import { Loader, Dimmer, Message, Container, Menu, Segment, Popup, Button, Icon } from "semantic-ui-react";
 import Spellbook from "./Spellbook";
 import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
-import Login from "./Login";
 import { fetchAPIData, getCurrentUser } from "../actions"
 
 class App extends Component {
@@ -24,8 +23,8 @@ class App extends Component {
       return <Spellbook />;
     } else if (this.state.activeItem === 'All Spells') {
       return <AllSpells />;
-    } else if (this.state.activeItem === 'Log In') {
-      return <Login />;
+    } else {
+      return <DailySpells />;
     }
   }
 
@@ -53,12 +52,19 @@ class App extends Component {
             <Menu.Menu position='right'>
               <Menu.Item icon='help circle' href='/api/current_user' target='_blank' />
               {!this.props.currentUser ?
-                <Menu.Item
-                  name='Log In'
-                  icon='user'
-                  active={activeItem === 'Log In'}
-                  onClick={this.handleItemClick}/> :
-                <Menu.Item name='Log Out'icon='log out' href='/api/logout'/>}
+                <Popup on='click' position='bottom right' trigger={<Menu.Item icon='user circle' content='Log In' />}
+                  content={
+                    <div>
+                      <Button style={{ 'marginTop': '10px' }} color='red' href='/auth/google'>
+                        <Icon name='google' />
+                        Sign in with Google
+                      </Button>
+                      <Button style={{ 'marginTop': '10px' }} color='blue' href='/auth/facebook'>
+                        <Icon name='facebook' />
+                        Sign in with Facebook
+                      </Button>
+                    </div>} />
+                : <Menu.Item name='Log Out' icon='log out' href='/api/logout' />}
             </Menu.Menu>
           </Menu>
           <Segment attached='bottom'>
@@ -69,9 +75,10 @@ class App extends Component {
     } else if (this.props.apiData.error) {
       return (
         <Container textAlign='center' style={{ marginTop: '25vh' }}>
+          <img alt='wizard hat' id='error-img' src='/wizard-hat.png' />
           <Message size='large' compact negative>
-            <Message.Header>Error in retrieving spells from Open5e</Message.Header>
-            <p>Please reload to try again.</p>
+            <Message.Header>Error in loading Enchant</Message.Header>
+            <p>Please refresh page to try again.</p>
           </Message>
         </Container>
 
@@ -85,7 +92,6 @@ class App extends Component {
       <Dimmer.Dimmable>
         <Dimmer active={!this.props.apiData.complete && !this.props.apiData.error}>
           <Loader size='massive' content='Loading Enchant' /></Dimmer>
-        {this.state.currentUser}
         {this.renderAppOnFetchComplete()}
       </Dimmer.Dimmable>
     );
