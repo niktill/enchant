@@ -10,22 +10,22 @@ module.exports = (app) => {
             if (user) {
                 res.send(user.spellBookSpells);
             } else {
-                res.send(404);
+                res.sendStatus(404);
             }
         } else {
-            res.send(404);
+            res.sendStatus(404);
         }
     });
     app.post('/api/current_user/spellbookspells', async (req, res) => {
         if (req.user) {
             const user = await User.findByIdAndUpdate(req.user.id, {spellBookSpells: req.body.spellBookSpells});
             if (user) {
-                res.send(200);
+                res.sendStatus(200);
             } else {
-                res.send(400);
+                res.sendStatus(400);
             }
         } else {
-            res.send(400);
+            res.sendStatus(400);
         }
     });
     // Daily Spells Routes
@@ -35,22 +35,22 @@ module.exports = (app) => {
             if (user) {
                 res.send(user.dailySpells);
             } else {
-                res.send(404);
+                res.sendStatus(404);
             }
         } else {
-            res.send(404);
+            res.sendStatus(404);
         }
     });
     app.post('/api/current_user/dailyspells', async (req, res) => {
         if (req.user) {
             const user = await User.findByIdAndUpdate(req.user.id, {dailySpells: req.body.dailySpells});
             if (user) {
-                res.send(200);
+                res.sendStatus(200);
             } else {
-                res.send(400);
+                res.sendStatus(400);
             }
         } else {
-            res.send(400);
+            res.sendStatus(400);
         }
     });
 
@@ -61,10 +61,10 @@ module.exports = (app) => {
             if (user) {
                 res.send(user.spellSlots);
             } else {
-                res.send(404);
+                res.sendStatus(404);
             }
         } else {
-            res.send(404);
+            res.sendStatus(404);
         }
     });
 
@@ -72,12 +72,12 @@ module.exports = (app) => {
         if (req.user) {
             const user = await User.findByIdAndUpdate(req.user.id, {spellSlots: req.body.spellSlots});
             if (user) {
-                res.send(200);
+                res.sendStatus(200);
             } else {
-                res.send(400);
+                res.sendStatus(400);
             }
         } else {
-            res.send(400);
+            res.sendStatus(400);
         }
     });
 }

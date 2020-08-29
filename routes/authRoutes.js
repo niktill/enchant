@@ -1,4 +1,5 @@
 const passport = require('passport');
+const mongoose = require('mongoose');
 
 module.exports = (app) => {
     app.get('/auth/google',
@@ -27,8 +28,12 @@ module.exports = (app) => {
         }
     });
 
-    app.get('/api/logout', (req, res)=>{
+    app.get('/api/logout', (req, res) => {
         req.logout();
         res.redirect('/');
     });
+
+    app.get('/api/status', (req, res) => {
+        mongoose.connection.readyState === 1 ? res.sendStatus(200) : res.sendStatus(500);
+    })
 }

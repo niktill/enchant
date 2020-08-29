@@ -4,7 +4,8 @@ import { Loader, Dimmer, Message, Container, Menu, Segment, Popup, Button, Icon 
 import Spellbook from "./Spellbook";
 import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
-import { fetchAPIData, getCurrentUser } from "../actions"
+import ErrorMessage from "./ErrorMessage";
+import { fetchAPIData, getCurrentUser, checkLogInStatus } from "../actions"
 
 class App extends Component {
   state = { activeItem: 'Daily Spells' };
@@ -12,8 +13,9 @@ class App extends Component {
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   componentDidMount() {
-    this.props.getCurrentUser()
     this.props.fetchAPIData();
+    this.props.checkLogInStatus();
+    this.props.getCurrentUser();
   };
 
   renderActiveTab() {
@@ -26,6 +28,26 @@ class App extends Component {
     } else {
       return <DailySpells />;
     }
+  }
+
+  renderLoginMenuItem() {
+    if (this.props.currentUser) {
+      return <Menu.Item name='Log Out' icon='log out' href='/api/logout' />;
+    }
+    return (
+      <Popup on='click' position='bottom right'
+        trigger={<Menu.Item icon='user circle' content='Log In' disabled={!this.props.loginStatus} />}
+        content={
+          <div className='login-container'>
+            <Button style={{ 'marginTop': '10px' }} color='red' href='/auth/google'>
+              <Icon name='google' />
+          Sign in with Google
+        </Button>
+            <Button style={{ 'marginTop': '10px' }} color='blue' href='/auth/facebook'>
+              <Icon name='facebook' />
+          Sign in with Facebook
+        </Button>
+          </div>} />);
   }
 
   renderAppOnFetchComplete() {
@@ -50,21 +72,8 @@ class App extends Component {
               onClick={this.handleItemClick}
             />
             <Menu.Menu position='right'>
-              <Menu.Item icon='help circle' href='/api/current_user' target='_blank' />
-              {!this.props.currentUser ?
-                <Popup on='click' position='bottom right' trigger={<Menu.Item icon='user circle' content='Log In' />}
-                  content={
-                    <div>
-                      <Button style={{ 'marginTop': '10px' }} color='red' href='/auth/google'>
-                        <Icon name='google' />
-                        Sign in with Google
-                      </Button>
-                      <Button style={{ 'marginTop': '10px' }} color='blue' href='/auth/facebook'>
-                        <Icon name='facebook' />
-                        Sign in with Facebook
-                      </Button>
-                    </div>} />
-                : <Menu.Item name='Log Out' icon='log out' href='/api/logout' />}
+              <Menu.Item icon='help circle' href='/api/current_user' target='_blank' link />
+              {this.renderLoginMenuItem()}
             </Menu.Menu>
           </Menu>
           <Segment attached='bottom'>
@@ -74,11 +83,11 @@ class App extends Component {
       );
     } else if (this.props.apiData.error) {
       return (
-        <Container textAlign='center' style={{ marginTop: '25vh' }}>
-          <img alt='wizard hat' id='error-img' src='/wizard-hat.png' />
-          <Message size='large' compact negative>
+        <Container textAlign='center' style={{ marginTop: '25vh', width: '30%' }}>
+          <img alt='wizard hat' className='wizard-hat-img' src='/wizard-hat.png' />
+          <Message size='large' negative>
             <Message.Header>Error in loading Enchant</Message.Header>
-            <p>Please refresh page to try again.</p>
+            <p>We had issues preparing our spells. Please refresh page to try again.</p>
           </Message>
         </Container>
 
@@ -91,8 +100,14 @@ class App extends Component {
     return (
       <Dimmer.Dimmable>
         <Dimmer active={!this.props.apiData.complete && !this.props.apiData.error}>
-          <Loader size='massive' content='Loading Enchant' /></Dimmer>
+          <img alt='wizard hat' className='wizard-hat-img' src='/wizard-hat.png' style={{ 'position': 'relative', 'bottom': '125px' }} />
+          <Loader size='massive' content={
+            <div>
+              Loading Enchant
+            </div>
+          } /></Dimmer>
         {this.renderAppOnFetchComplete()}
+        <ErrorMessage className='enchant-error-message' />
       </Dimmer.Dimmable>
     );
   }
@@ -101,8 +116,10 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     apiData: state.apiData,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    errorMessage: state.errorMessage,
+    loginStatus: state.loginStatus
   };
 };
 
-export default connect(mapStateToProps, { fetchAPIData, getCurrentUser })(App);
+export default connect(mapStateToProps, { fetchAPIData, getCurrentUser, checkLogInStatus })(App);

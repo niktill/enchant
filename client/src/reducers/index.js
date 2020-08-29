@@ -1,5 +1,23 @@
 import { combineReducers } from 'redux';
 
+// reducer to check status of login
+const loginStatusReducer = (loginStatus=0, action) => {
+    if (action.type === 'LOG_IN_STATUS_SUCCESS') {
+        return 1;
+    } else if (action.type === 'LOG_IN_STATUS_FAIL') {
+        return 0;
+    }
+    return loginStatus;
+};
+
+// reducer to help determine if user is logged in
+const authReducer = (user=null, action) => {
+    if (action.type === 'FETCH_USER') {
+        return action.payload || false;
+    }
+    return user;
+};
+
 // Reducer for fetching API data
 const fetchAPIDataReducer = (apiData = {}, action) => {
     if (action.type === 'API_DATA_FETCHED') {
@@ -9,14 +27,6 @@ const fetchAPIDataReducer = (apiData = {}, action) => {
         apiData = { ...apiData, error: 1 };
     }
     return apiData;
-};
-
-// reducer to help determine if user is logged in
-const authReducer = (user=null, action) => {
-    if (action.type === 'FETCH_USER') {
-        return action.payload || false;
-    }
-    return user;
 };
 
 // Reducer that manages spells in spell book
@@ -110,6 +120,16 @@ const spellSlotsReducer = (spellSlots = spellSlotsDefault, action) => {
     return spellSlots;
 };
 
+// Send error message reducer
+const sendErrorMessageReducer = (errorMessage={}, action) => {
+    if (action.type === 'ACTIVATE_ERROR_MESSAGE') {
+        return { type: action.payload.type, message: action.payload.message, active: true};
+    } else if (action.type === 'CLOSE_ERROR_MESSAGE') {
+        return {...errorMessage, active: false}
+    }
+    return {...errorMessage}
+};
+
 export default combineReducers({
     apiData: fetchAPIDataReducer,
     spellbookSpells: spellbookSpellsReducer,
@@ -117,5 +137,7 @@ export default combineReducers({
     selectedFilters: selectFilterReducer,
     selectedSorter: selectSortingReducer,
     spellSlots: spellSlotsReducer,
-    currentUser: authReducer
+    currentUser: authReducer,
+    errorMessage: sendErrorMessageReducer,
+    loginStatus: loginStatusReducer
 });

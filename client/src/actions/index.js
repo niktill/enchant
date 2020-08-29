@@ -1,13 +1,27 @@
 import axios from 'axios';
 import dnd5eapi from '../apis/dnd5eapi';
 
+// Check Log in status
+export const checkLogInStatus = () => async (dispatch, getState) => {
+    try {
+        await axios.get('/api/status');
+        dispatch({type: 'LOG_IN_STATUS_SUCCESS'});
+    } catch { // backend status is not good
+        dispatch({type: 'LOG_IN_STATUS_FAIL'});
+        dispatch({ 
+            type: 'ACTIVATE_ERROR_MESSAGE',
+            payload: { type: 'Log in is not available', message: 'We are currently facing an issue with our log in service. Sorry!' }
+        });
+    }
+};
+
 // Check if current user is logged in
 export const getCurrentUser = () => async (dispatch) => {
     try {
         const res = await axios.get('/api/current_user');
         dispatch({ type: 'FETCH_USER', payload: res.data });
     } catch (err) {
-        console.log(err);
+        dispatch({ type: 'FETCH_USER', payload: '' });
     }
 }
 
@@ -42,19 +56,19 @@ export const selectSpellbookSpell = (spell) => async (dispatch, getState) => {
     const { currentUser, dailySpells } = getState();
     // Check if user signed in
     if (currentUser) {
-        const currentDailySpells = dailySpells;
-        const newDailySpells = currentDailySpells.some(el => el.slug === spell.slug) ?
-            currentDailySpells.filter(spellInDailySpell => spellInDailySpell.slug !== spell.slug) : [...currentDailySpells, spell];
-
-        const updateDailySpells = await axios.post('/api/current_user/dailyspells', { dailySpells: newDailySpells });
-        if (updateDailySpells.status === 200) {
-            dispatch({ type: 'SPELLBOOK_SPELL_SELECT', payload: spell });
-        } else {
-            console.log('ERROR IN UPDATING DAILY SPELLS');
+        try {
+            const currentDailySpells = dailySpells;
+            const newDailySpells = currentDailySpells.some(el => el.slug === spell.slug) ?
+                currentDailySpells.filter(spellInDailySpell => spellInDailySpell.slug !== spell.slug) : [...currentDailySpells, spell];
+            await axios.post('/api/current_user/dailyspells', { dailySpells: newDailySpells });
+        } catch {
+            dispatch({ // error in saving spell book spell to account
+                type: 'ACTIVATE_ERROR_MESSAGE',
+                payload: { type: 'Error in selecting spellbook spell', message: 'Could not save spellbook spell selection to your account.' }
+            });
         }
-    } else { // no user is signed in, no api calls needed
-        dispatch({ type: 'SPELLBOOK_SPELL_SELECT', payload: spell });
     }
+    dispatch({ type: 'SPELLBOOK_SPELL_SELECT', payload: spell });
 };
 
 // Select All Spell Action Creator
@@ -62,30 +76,25 @@ export const selectAllSpellsSpell = (spell) => async (dispatch, getState) => {
     const { currentUser, spellbookSpells, dailySpells } = getState();
     // Check if user signed in
     if (currentUser) {
-        const currentUserSpellBook = spellbookSpells;
-        const newSpellBookSpells = currentUserSpellBook.some(el => el.slug === spell.slug) ?
-            currentUserSpellBook.filter(spellInBook => spellInBook.slug !== spell.slug) : [...currentUserSpellBook, spell];
-
-        const updateSpellBookSpells = await axios.post('/api/current_user/spellbookspells', { spellBookSpells: newSpellBookSpells });
-        if (updateSpellBookSpells.status === 200) {
+        try {
+            const currentUserSpellBook = spellbookSpells;
+            const newSpellBookSpells = currentUserSpellBook.some(el => el.slug === spell.slug) ?
+                currentUserSpellBook.filter(spellInBook => spellInBook.slug !== spell.slug) : [...currentUserSpellBook, spell];
+            await axios.post('/api/current_user/spellbookspells', { spellBookSpells: newSpellBookSpells });
             // Do we need to remove a spell from Daily spell?
             if (dailySpells.some(el => el.slug === spell.slug)) {
                 const newDailySpells = dailySpells.filter(spellInDailySpell => spellInDailySpell.slug !== spell.slug);
-                const updateDailySpells = await axios.post('/api/current_user/dailyspells', { dailySpells: newDailySpells });
-                if (updateDailySpells.status === 200) {
-                    dispatch({ type: 'ALL_SPELLS_SPELL_SELECT', payload: spell });
-                } else {
-                    console.log('ERROR IN REMOVING DAILY SPELL');
-                }
-            } else { // No need to remove daily spell
-                dispatch({ type: 'ALL_SPELLS_SPELL_SELECT', payload: spell });
+                await axios.post('/api/current_user/dailyspells', { dailySpells: newDailySpells });
             }
-        } else {
-            console.log('ERROR IN UPDATING SPELLBOOK');
+        } catch { // error in saving all spell select to account
+            dispatch({
+                type: 'ACTIVATE_ERROR_MESSAGE',
+                payload: { type: 'Error in selecting spell', message: 'Could not save spell select to your account.' }
+            });
         }
-    } else { // no user is signed in, no api calls needed
-        dispatch({ type: 'ALL_SPELLS_SPELL_SELECT', payload: spell });
+
     }
+    dispatch({ type: 'ALL_SPELLS_SPELL_SELECT', payload: spell });
 };
 
 // Filter Spells by Dnd Class Action Creator
@@ -109,16 +118,17 @@ export const castSpell = (spellLevel) => async (dispatch, getState) => {
     const { currentUser, spellSlots } = getState();
     // check if user is signed in
     if (currentUser) {
-        const newSpellSlots = spellSlots.map((el, index) => index + 1 === spellLevel ? [el[0] - 1, el[1]] : el);
-        const updateSpellSlots = await axios.post('/api/current_user/spellslots', {spellSlots: newSpellSlots});
-        if (updateSpellSlots.status === 200) {
-            dispatch({ type: 'CAST_SPELL', payload : {spellLevel: spellLevel}});
-        } else {
-            console.log('ERROR IN CASTING SPELL');
+        try {
+            const newSpellSlots = spellSlots.map((el, index) => index + 1 === spellLevel ? [el[0] - 1, el[1]] : el);
+            await axios.post('/api/current_user/spellslots', { spellSlots: newSpellSlots });
+        } catch { // error in saving spell cast to account
+            dispatch({
+                type: 'ACTIVATE_ERROR_MESSAGE',
+                payload: { type: 'Error in casting spell', message: 'Could not save spell cast to your account.' }
+            });
         }
-    } else { // no user is signed in, no api call needed
-        dispatch({ type: 'CAST_SPELL', payload : {spellLevel: spellLevel}});
     }
+    dispatch({ type: 'CAST_SPELL', payload: { spellLevel: spellLevel } });
 };
 
 // Refill spell slots on Daily Spells Tab
@@ -126,16 +136,17 @@ export const refillSpellSlots = () => async (dispatch, getState) => {
     const { currentUser, spellSlots } = getState();
     // check if user is signed in
     if (currentUser) {
-        const newSpellSlots = spellSlots.map(el => [el[1], el[1]]);
-        const updateSpellSlots = await axios.post('/api/current_user/spellslots', {spellSlots: newSpellSlots});
-        if (updateSpellSlots.status === 200) {
-            dispatch({ type: 'REFILL_SPELL_SLOTS'});
-        } else {
-            console.log('ERROR IN SETTING REFILLING SPELL SLOTS');
+        try {
+            const newSpellSlots = spellSlots.map(el => [el[1], el[1]]);
+            await axios.post('/api/current_user/spellslots', { spellSlots: newSpellSlots });
+        } catch { // error in saving refill spell slots to account
+            dispatch({
+                type: 'ACTIVATE_ERROR_MESSAGE',
+                payload: { type: 'Error in refilling spell slots', message: 'Could not save spell slot refill to your account.' }
+            });
         }
-    } else { // no user is signed in, no api call needed
-        dispatch({ type: 'REFILL_SPELL_SLOTS'});
-    }
+    } 
+    dispatch({ type: 'REFILL_SPELL_SLOTS' });
 };
 
 // Set max spell slots on Daily Spells Tab
@@ -146,16 +157,24 @@ export const setMaxSpellSlots = (spellLevel, maxSpellSlots) => async (dispatch, 
     const { currentUser, spellSlots } = getState();
     // check if user is signed in
     if (currentUser) {
+        try {
         const currentSpellSlots = spellSlots;
         const newCurSpellSlots = (currentSpellSlots[spellLevel - 1][0] > maxSpellSlots) ? maxSpellSlots : spellSlots[spellLevel - 1][0]
         const newSpellSlots = currentSpellSlots.map((el, index) => ((index + 1) === spellLevel) ? [newCurSpellSlots, maxSpellSlots] : el);
-        const updateSpellSlots = await axios.post('/api/current_user/spellslots', {spellSlots: newSpellSlots});
-        if (updateSpellSlots.status === 200) {
-            dispatch({ type: 'SET_MAX_SPELL_SLOTS', payload: { spellLevel: spellLevel, maxSpellSlots: maxSpellSlots }});
-        } else {
-            console.log('ERROR IN SETTING MAX SPELL SLOTS');
+        await axios.post('/api/current_user/spellslots', { spellSlots: newSpellSlots });
+        } catch { // error in setting max spell slot to account
+            dispatch({
+                type: 'ACTIVATE_ERROR_MESSAGE',
+                payload: { type: 'Error in setting spell slots', message: 'Could not save spell slots change to your account.' }
+            });
         }
-    } else { // no user is signed in, no api call needed
-        dispatch({ type: 'SET_MAX_SPELL_SLOTS', payload: { spellLevel: spellLevel, maxSpellSlots: maxSpellSlots }});
-    }
+    } 
+    dispatch({ type: 'SET_MAX_SPELL_SLOTS', payload: { spellLevel: spellLevel, maxSpellSlots: maxSpellSlots } });
+};
+
+// Close Error Message Action Creator
+export const closeErrorMessage = () => {
+    return {
+        type: 'CLOSE_ERROR_MESSAGE'
+    };
 };
