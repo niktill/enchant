@@ -72,7 +72,7 @@ class App extends Component {
               onClick={this.handleItemClick}
             />
             <Menu.Menu position='right'>
-              <Menu.Item icon='help circle' href='/api/current_user' target='_blank' link />
+              <Menu.Item icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
               {this.renderLoginMenuItem()}
             </Menu.Menu>
           </Menu>
