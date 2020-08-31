@@ -35,7 +35,7 @@ class SpellSlots extends Component {
                                     <Input size='mini' className='setSpellSlotMax' type='text'
                                         value={el[1]}
                                         onChange={(event, data) =>
-                                            this.props.setMaxSpellSlots(index + 1, parseInt(data.value.replace(/^0+|0+$/g, "")))} />
+                                            this.props.setMaxSpellSlots(index + 1, parseInt(data.value.replace(/^0+$/g, "")))} />
                                 </Table.Cell>)}
                         </Table.Row>
                     </Table.Body>
