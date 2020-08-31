@@ -69,7 +69,7 @@ class SpellList extends Component {
           ? numberOfSpells : (columnNum * maxSpellInColumn) - 1;
         AllSpellsColumns.push(
           (<Grid.Column key={columnNum}>
-            <List selection={this.props.tabName === 'dailySpells'}>
+            <List selection={this.props.tabName === 'dailySpells' || isMobile}>
               {spellsToRender.slice(curSpellIndexMin, curSpellIndexMax).map((spell, index) => {
                 let curIndex = curSpellIndexMin + index;
                 if (requiresSorterHeaders &&

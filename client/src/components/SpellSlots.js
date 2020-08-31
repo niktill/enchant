@@ -16,8 +16,8 @@ class SpellSlots extends Component {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell colSpan='9'>
-                                <h3 style={{display: 'inline'}}>Spell Slots</h3>
-                                <Button size='small' content='Refill Spell Slots' style={{marginLeft: '10px'}} onClick={() => this.props.refillSpellSlots()} />
+                                <h3 style={{ display: 'inline' }}>Spell Slots</h3>
+                                <Button size='small' content='Refill Spell Slots' style={{ marginLeft: '10px' }} onClick={() => this.props.refillSpellSlots()} />
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
@@ -32,9 +32,10 @@ class SpellSlots extends Component {
                             {this.props.spellSlots.map((el, index) =>
                                 <Table.Cell key={index}>
                                     {el[0] + ' / '}
-                                    <Input size='mini' className='setSpellSlotMax' type='number' min='0'
+                                    <Input size='mini' className='setSpellSlotMax' type='text'
                                         value={el[1]}
-                                        onChange={(event, data) => this.props.setMaxSpellSlots(index + 1, parseInt(data.value))} />
+                                        onChange={(event, data) =>
+                                            this.props.setMaxSpellSlots(index + 1, parseInt(data.value.replace(/^0+|0+$/g, "")))} />
                                 </Table.Cell>)}
                         </Table.Row>
                     </Table.Body>
