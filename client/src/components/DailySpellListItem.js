@@ -16,6 +16,7 @@ class DailySpellListItem extends Component {
                 trigger={
                     <List.Item>
                         <Popup wide='very' basic size='small' header={this.props.spell.name}
+                            disabled={this.props.isMobile}
                             content={<SpellDescription spell={this.props.spell} />}
                             trigger={<p className='dailySpellName'>{this.props.spell.name}</p>} />
                     </List.Item>}

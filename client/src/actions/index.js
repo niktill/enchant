@@ -151,7 +151,7 @@ export const refillSpellSlots = () => async (dispatch, getState) => {
 
 // Set max spell slots on Daily Spells Tab
 export const setMaxSpellSlots = (spellLevel, maxSpellSlots) => async (dispatch, getState) => {
-    if (!maxSpellSlots) {
+    if (!maxSpellSlots || maxSpellSlots < 0) {
         maxSpellSlots = 0;
     }
     const { currentUser, spellSlots } = getState();

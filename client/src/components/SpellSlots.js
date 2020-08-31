@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Header, Table, Input, Button } from "semantic-ui-react";
+import { Table, Input, Button } from "semantic-ui-react";
 import { setMaxSpellSlots, refillSpellSlots } from "../actions";
 
 class SpellSlots extends Component {
@@ -11,10 +11,16 @@ class SpellSlots extends Component {
     }
     render() {
         return (
-            <div style={{'marginBottom': '10px'}}>
-                <Header as='h2' style={{'display': 'block', 'textAlign': 'center'}}>Spell Slots</Header>
-                <Button content='Refill Spell Slots' onClick={() => this.props.refillSpellSlots()} />
-                <Table celled style={{'marginBottom': '20px'}}>
+            <div style={{ 'marginBottom': '10px' }}>
+                <Table unstackable celled style={{ 'marginBottom': '20px' }}>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell colSpan='9'>
+                                <h3 style={{display: 'inline'}}>Spell Slots</h3>
+                                <Button size='small' content='Refill Spell Slots' style={{marginLeft: '10px'}} onClick={() => this.props.refillSpellSlots()} />
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
                     <Table.Header>
                         <Table.Row>
                             {this.spellSlotHeaders.map(el =>

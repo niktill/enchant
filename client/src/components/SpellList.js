@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { List, Checkbox, Grid, Message, Container, Popup, Segment } from "semantic-ui-react";
 import SpellDescription from './SpellDescription';
 import DailySpellListItem from './DailySpellListItem';
+import MobileSpellListItem from './MobileSpellListItem';
 import { selectAllSpellsSpell } from "../actions";
+import isMobile from '../isMobile';
 
 class SpellList extends Component {
   getFilteredSpells() {
@@ -28,16 +30,23 @@ class SpellList extends Component {
   }
   renderSpellListItem(spell) {
     if (this.props.tabName === 'dailySpells') {
-      return <DailySpellListItem key={this.props.tabName + "-spells-" + spell.slug} spell={spell}/>;
+      return <DailySpellListItem isMobile={isMobile} key={this.props.tabName + "-spells-" + spell.slug} spell={spell} />
+    } else if (isMobile) { // all spells or spell book mobile
+      return (
+        <MobileSpellListItem key={this.props.tabName + "-spells-" + spell.slug}
+          spellListMonitors={this.props.spellListMonitors}
+          selectSpellAction={this.props.selectSpellAction}
+          spell={spell} />
+      );
     }
-    return (
+    return ( // all spells or spell book desktop
       <List.Item key={this.props.tabName + "-spells-" + spell.slug}>
-        <Popup wide='very' basic size='small' header={spell.name}
+        <Popup disabled={isMobile} on='hover' wide='very' basic size='small' header={spell.name}
           content={<SpellDescription spell={spell} />}
           trigger={
             <Checkbox
               label={spell.name}
-              checked={this.props.spellListMonitors.some( el => el.slug === spell.slug)}
+              checked={this.props.spellListMonitors.some(el => el.slug === spell.slug)}
               onClick={() => this.props.selectSpellAction(spell)} />} />
       </List.Item>
     );
@@ -76,7 +85,7 @@ class SpellList extends Component {
           </Grid.Column>))
       }
       return <Grid className="spellListGrid" columns={numberOfColumns} stackable doubling>{AllSpellsColumns}</Grid>;
-    } else {
+    } else { // spells to render is empty
       return (
         <Container textAlign='center'>
           <Message compact>
