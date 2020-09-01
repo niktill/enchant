@@ -95,7 +95,7 @@ class App extends Component {
   renderMobileApp() {
     const { activeItem } = this.state;
     return (
-      <Sidebar.Pushable as={Segment}>
+      <Sidebar.Pushable as={Segment} style={{ marginTop: '0' }}> 
         <Sidebar
           as={Menu}
           animation='overlay'

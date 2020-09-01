@@ -12,7 +12,7 @@ class DailySpellListItem extends Component {
     }
     render() {
         return (
-            <Modal
+            <Modal closeIcon
                 trigger={
                     <List.Item>
                         <Popup wide='very' basic size='small' header={this.props.spell.name}

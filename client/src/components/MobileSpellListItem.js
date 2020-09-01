@@ -7,7 +7,7 @@ class MobileSpellListItem extends Component {
     render() {
         const spellSelected = this.props.spellListMonitors.some(el => el.slug === this.props.spell.slug);
         return (
-            <Modal
+            <Modal closeIcon
                 trigger={
                     <List.Item>
                         {this.props.spell.name}
