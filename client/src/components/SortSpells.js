@@ -20,19 +20,20 @@ class SortSpells extends Component {
   render() {
     return (
       <Popup hoverable on={['click']}
-        content={<Button.Group>
-          {this.renderClassSpellSortButtons()}
-          <Button icon
-            active={this.props.selectedSorter[this.props.tabName] === 'alpha-down'}
-            onClick={() => this.props.selectSortSpellLevel('alpha-down', this.props.tabName)}>
-            <Icon name='sort alphabet down' />
-          </Button>
-          <Button icon
-            active={this.props.selectedSorter[this.props.tabName] === 'alpha-up'}
-            onClick={() => this.props.selectSortSpellLevel('alpha-up', this.props.tabName)}>
-            <Icon name='sort alphabet up' />
-          </Button>
-        </Button.Group>}
+        content={
+          <Button.Group className='stackable'>
+            {this.renderClassSpellSortButtons()}
+            <Button icon
+              active={this.props.selectedSorter[this.props.tabName] === 'alpha-down'}
+              onClick={() => this.props.selectSortSpellLevel('alpha-down', this.props.tabName)}>
+              <Icon name='sort alphabet down' />
+            </Button>
+            <Button icon
+              active={this.props.selectedSorter[this.props.tabName] === 'alpha-up'}
+              onClick={() => this.props.selectSortSpellLevel('alpha-up', this.props.tabName)}>
+              <Icon name='sort alphabet up' />
+            </Button>
+          </Button.Group>}
         trigger={<Button>Sort</Button>} />
     )
   }

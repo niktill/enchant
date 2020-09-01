@@ -95,3 +95,17 @@
     80%{-webkit-transform:scale(1.1)}
     to{-webkit-transform:scale(1)}
 }
+
+@media only screen and (max-width: 767px) {
+    .ui.stackable.buttons{
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .ui.stackable.buttons > .button{
+      width: 100%;
+    }
+  }
