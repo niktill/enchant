@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Loader, Dimmer, Message, Container, Menu, Segment, Popup, Button, Icon } from "semantic-ui-react";
+import { Loader, Dimmer, Message, Sidebar, Menu, Segment, Popup, Button, Icon } from "semantic-ui-react";
 import Spellbook from "./Spellbook";
 import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
@@ -8,14 +8,23 @@ import ErrorMessage from "./ErrorMessage";
 import { fetchAPIData, getCurrentUser, checkLogInStatus } from "../actions"
 
 class App extends Component {
-  state = { activeItem: 'Daily Spells' };
+  state = {
+    activeItem: 'Daily Spells',
+    windowWidth: document.documentElement.clientWidth,
+    mobileSidebarVisible: false
+  };
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name, mobileSidebarVisible: false });
+  };
 
   componentDidMount() {
     this.props.fetchAPIData();
     this.props.checkLogInStatus();
     this.props.getCurrentUser();
+    window.addEventListener('resize', () => {
+      this.setState({ windowWidth: document.documentElement.clientWidth })
+    })
   };
 
   renderActiveTab() {
@@ -50,48 +59,90 @@ class App extends Component {
           </div>} />);
   }
 
-  renderAppOnFetchComplete() {
-    if (this.props.apiData.complete) {
-      const { activeItem } = this.state;
-      return (
-        <div>
-          <Menu size='large' attached='top' tabular>
-            <Menu.Item
-              name='Daily Spells'
-              active={activeItem === 'Daily Spells'}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              name='Spell Book'
-              active={activeItem === 'Spell Book'}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              name='All Spells'
-              active={activeItem === 'All Spells'}
-              onClick={this.handleItemClick}
-            />
+  renderDesktopApp() {
+    const { activeItem } = this.state;
+    return (
+      <div>
+        <Menu size='large' attached='top' tabular>
+          <Menu.Item
+            name='Daily Spells'
+            active={activeItem === 'Daily Spells'}
+            onClick={this.handleItemClick} />
+          <Menu.Item
+            name='Spell Book'
+            active={activeItem === 'Spell Book'}
+            onClick={this.handleItemClick} />
+          <Menu.Item
+            name='All Spells'
+            active={activeItem === 'All Spells'}
+            onClick={this.handleItemClick} />
+          <Menu.Item style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+            <img alt='wizard hat' src='wizard-hat.png' style={{ height: '30px', width: '30px', marginRight: '10px' }} />
+            <h3 style={{ margin: '0' }}>Enchant</h3>
+          </Menu.Item>
+          <Menu.Menu position='right'>
+            <Menu.Item icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
+            {this.renderLoginMenuItem()}
+          </Menu.Menu>
+        </Menu>
+        <Segment attached='bottom'>
+          {this.renderActiveTab()}
+        </Segment>
+      </div>
+    );
+  }
+
+  renderMobileApp() {
+    const { activeItem } = this.state;
+    return (
+      <Sidebar.Pushable as={Segment}>
+        <Sidebar
+          as={Menu}
+          animation='overlay'
+          onHide={() => this.setState({ mobileSidebarVisible: false })}
+          vertical
+          visible={this.state.mobileSidebarVisible}
+          width='thin'>
+          <Menu.Item
+            name='Daily Spells'
+            icon='magic'
+            active={activeItem === 'Daily Spells'}
+            onClick={this.handleItemClick} />
+          <Menu.Item
+            name='Spell Book'
+            icon='book'
+            active={activeItem === 'Spell Book'}
+            onClick={this.handleItemClick} />
+          <Menu.Item
+            icon='list'
+            name='All Spells'
+            active={activeItem === 'All Spells'}
+            onClick={this.handleItemClick} />
+          <Menu.Item content='Help' icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
+        </Sidebar>
+
+        <Sidebar.Pusher dimmed={this.state.mobileSidebarVisible}>
+          <Menu className='mobileNav' borderless>
+            <Menu.Item position='left'>
+              <Icon size='large' name='bars' onClick={() => this.setState({ mobileSidebarVisible: true })} />
+            </Menu.Item>
+            <Menu.Item style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+              <img alt='wizard hat' src='wizard-hat.png' style={{ height: '30px', width: '30px', marginRight: '10px' }} />
+              <h3 style={{ margin: '0' }}>Enchant</h3>
+            </Menu.Item>
             <Menu.Menu position='right'>
-              <Menu.Item icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
               {this.renderLoginMenuItem()}
             </Menu.Menu>
           </Menu>
-          <Segment attached='bottom'>
-            {this.renderActiveTab()}
-          </Segment>
-        </div>
-      );
-    } else if (this.props.apiData.error) {
-      return (
-        <Container textAlign='center' style={{ marginTop: '25vh', width: '30%' }}>
-          <img alt='wizard hat' className='wizard-hat-img' src='/wizard-hat.png' />
-          <Message size='large' negative>
-            <Message.Header>Error in loading Enchant</Message.Header>
-            <p>We had issues preparing our spells. Please refresh page to try again.</p>
-          </Message>
-        </Container>
+          {this.renderActiveTab()}
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
+    );
+  }
 
-      );
+  renderAppOnFetchComplete() {
+    if (this.props.apiData.complete) {
+      return this.state.windowWidth < 767 ? this.renderMobileApp() : this.renderDesktopApp()
     }
     return null;
   }
@@ -99,13 +150,20 @@ class App extends Component {
   render() {
     return (
       <Dimmer.Dimmable>
-        <Dimmer active={!this.props.apiData.complete && !this.props.apiData.error}>
-          <img alt='wizard hat' className='wizard-hat-img' src='/wizard-hat.png' style={{ 'position': 'relative', 'bottom': '125px' }} />
-          <Loader size='massive' content={
-            <div>
-              Loading Enchant
-            </div>
-          } /></Dimmer>
+        <Dimmer active={!this.props.apiData.complete || this.props.apiData.error}>
+          <img alt='wizard hat' className='wizard-hat-img' src='/wizard-hat.png'
+            style={{ 'position': 'relative', 'bottom': this.props.apiData.error ? '0' : '120px' }} />
+          {this.props.apiData.error ?
+            <Message size='large' negative textAlign='center'>
+              <Message.Header>Error in loading Enchant</Message.Header>
+              <p>We had issues preparing our spells. Please refresh page to try again.</p>
+            </Message>
+            :
+            <Loader size='massive' content={
+              <div>
+                Loading Enchant
+              </div>} />}
+        </Dimmer>
         {this.renderAppOnFetchComplete()}
         <ErrorMessage className='enchant-error-message' />
       </Dimmer.Dimmable>
