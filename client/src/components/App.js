@@ -66,14 +66,17 @@ class App extends Component {
         <Menu size='large' attached='top' tabular>
           <Menu.Item
             name='Daily Spells'
+            icon='magic'
             active={activeItem === 'Daily Spells'}
             onClick={this.handleItemClick} />
           <Menu.Item
             name='Spell Book'
+            icon='book'
             active={activeItem === 'Spell Book'}
             onClick={this.handleItemClick} />
           <Menu.Item
             name='All Spells'
+            icon='list'
             active={activeItem === 'All Spells'}
             onClick={this.handleItemClick} />
           <Menu.Item style={{ marginLeft: 'auto', marginRight: 'auto' }}>
@@ -101,8 +104,7 @@ class App extends Component {
           animation='overlay'
           onHide={() => this.setState({ mobileSidebarVisible: false })}
           vertical
-          visible={this.state.mobileSidebarVisible}
-          width='thin'>
+          visible={this.state.mobileSidebarVisible}>
           <Menu.Item
             name='Daily Spells'
             icon='magic'

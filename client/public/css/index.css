@@ -108,4 +108,10 @@
     .ui.stackable.buttons > .button{
       width: 100%;
     }
+    .ui.table:not(.unstackable) .spellSlotNumbers td:first-child {
+        font-weight: normal;
+    }
+    .ui.stackable.grid.spellListGrid>.column:not(.row) {
+        padding: 0rem 1rem!important;
+    }
   }

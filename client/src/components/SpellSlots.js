@@ -27,12 +27,12 @@ class SpellSlots extends Component {
                                 <Table.HeaderCell key={el[0]}>{el}</Table.HeaderCell>)}
                         </Table.Row>
                     </Table.Header>
-                    <Table.Body>
+                    <Table.Body className='spellSlotNumbers'>
                         <Table.Row>
                             {this.props.spellSlots.map((el, index) =>
                                 <Table.Cell key={index}>
                                     {el[0] + ' / '}
-                                    <Input size='mini' className='setSpellSlotMax' type='number'
+                                    <Input size='mini' className='setSpellSlotMax' type='text'
                                         value={el[1]}
                                         onChange={(event, data) =>
                                             this.props.setMaxSpellSlots(index + 1, parseInt(data.value.replace(/^0+$/g, "")))} />
