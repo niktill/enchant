@@ -36,9 +36,9 @@ class App extends Component {
     if (this.state.activeItem === 'Prepared Spells') {
       return <DailySpells />;
     } else if (this.state.activeItem === 'Spell Book') {
-      return <Spellbook />;
+      return <Spellbook showHeader={this.state.windowWidth <= 767} />;
     } else if (this.state.activeItem === 'All Spells') {
-      return <AllSpells />;
+      return <AllSpells showHeader={this.state.windowWidth <= 767} />;
     } else {
       return <DailySpells />;
     }
@@ -149,7 +149,7 @@ class App extends Component {
 
   renderAppOnFetchComplete() {
     if (this.props.appReady) {
-      return this.state.windowWidth < 767 ? this.renderMobileApp() : this.renderDesktopApp()
+      return this.state.windowWidth <= 767 ? this.renderMobileApp() : this.renderDesktopApp()
     }
     return null;
   }

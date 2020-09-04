@@ -12,7 +12,7 @@ class Spellbook extends Component {
       <div>
         <FilterSpells tabName='spellBookSpells' />
         <SortSpells tabName='spellBookSpells' />
-        <h3 style={{textAlign: 'center'}}><Icon name='book' /> Spell Book </h3>
+        {this.props.showHeader ? <h3 style={{textAlign: 'center'}}><Icon name='book' /> Spell Book </h3> : null}
         <SpellList tabName='spellBookSpells'
           spells={this.props.spellbookSpells}
           spellListMonitors={this.props.dailySpells}

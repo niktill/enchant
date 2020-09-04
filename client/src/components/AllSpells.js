@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Icon } from "semantic-ui-react";
 import FilterSpells from './FilterSpells';
 import SortSpells from './SortSpells';
 import SpellList from './SpellList';
@@ -11,6 +12,7 @@ class AllSpells extends Component {
       <div>
         <FilterSpells tabName='allSpells' />
         <SortSpells tabName='allSpells' />
+        {this.props.showHeader ? <h3 style={{textAlign: 'center'}}><Icon name='list' /> All Spells </h3> : null}
         <SpellList tabName='allSpells'
           spells={this.props.apiData.spells}
           spellListMonitors={this.props.spellbookSpells}
