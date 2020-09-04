@@ -86,16 +86,22 @@ class SpellList extends Component {
       }
       return <Grid className="spellListGrid" columns={numberOfColumns} stackable doubling>{AllSpellsColumns}</Grid>;
     } else { // spells to render is empty
+      let noSpellsMessage;
+      if (this.props.spells.length && this.props.selectedFilters[this.props.tabName].classes.length) {
+        noSpellsMessage = 'There are no spells defined by the selected filters.'
+      } else {
+        noSpellsMessage = (this.props.tabName === 'dailySpells') ?
+          'You have not prepared any spells! Please select your prepared spells from the Spell Book tab.' :
+          'This spell book is empty! Select spells in the All Spells tab to add to this spell book.'
+      }
       return (
         <Container textAlign='center'>
           <Message compact>
             <Message.Header>No Spells Available</Message.Header>
-            <p>{(this.props.tabName === 'dailySpells') ?
-              'You have not selected any daily spells! Please select your daily spells from the Spell Book tab.' :
-              'This spellbook is empty! Select spells in the All Spells tab to add to this spellbook.'}
-            </p>
+            <p>{noSpellsMessage}</p>
           </Message>
-        </Container>)
+        </Container>
+      );
     }
   }
 

@@ -96,7 +96,15 @@
     to{-webkit-transform:scale(1)}
 }
 
+.spellSlotNumbers .ui.input>input {
+    padding: 0.3rem;
+    font-size: 1rem;
+}
+
 @media only screen and (max-width: 767px) {
+    .ui.table.spellSlotsTable {
+        border-top: none;
+    }
     .ui.stackable.buttons{
       display: -webkit-box;
       display: -webkit-flex;

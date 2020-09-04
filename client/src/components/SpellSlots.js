@@ -12,7 +12,7 @@ class SpellSlots extends Component {
     render() {
         return (
             <div style={{ 'marginBottom': '10px' }}>
-                <Table stackable celled style={{ 'marginBottom': '20px' }}>
+                <Table stackable celled className='spellSlotsTable' style={{ 'marginBottom': '20px' }}>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell colSpan='9'>
@@ -32,10 +32,10 @@ class SpellSlots extends Component {
                             {this.props.spellSlots.map((el, index) =>
                                 <Table.Cell key={index}>
                                     {el[0] + ' / '}
-                                    <Input size='mini' className='setSpellSlotMax' type='text'
-                                        value={el[1]}
+                                    <Input size='small' className='setSpellSlotMax' type='number'
+                                        value={el[1].toString()}
                                         onChange={(event, data) =>
-                                            this.props.setMaxSpellSlots(index + 1, parseInt(data.value.replace(/^0+$/g, "")))} />
+                                            this.props.setMaxSpellSlots(index + 1, parseInt(data.value))} />
                                 </Table.Cell>)}
                         </Table.Row>
                     </Table.Body>

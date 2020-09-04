@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Icon } from "semantic-ui-react";
 import FilterSpells from './FilterSpells';
 import SortSpells from './SortSpells';
 import SpellList from './SpellList';
@@ -12,6 +13,7 @@ class DailySpells extends Component {
         <SpellSlots />
         <FilterSpells tabName='dailySpells' />
         <SortSpells tabName='dailySpells' />
+        <h3 style={{textAlign: 'center'}}><Icon name='magic'/> Prepared Spells</h3>
         <SpellList tabName='dailySpells'
           spells={this.props.dailySpells} />
       </div>);

@@ -29,6 +29,14 @@ const fetchAPIDataReducer = (apiData = {}, action) => {
     return apiData;
 };
 
+// Reducer to check when App is ready to render
+const appReadyReducer = (appReady=false, action) => {
+    if (action.type === 'APP_READY') {
+        return true
+    }
+    return appReady;
+};
+
 // Reducer that manages spells in spell book
 const spellbookSpellsReducer = (spellBookSpells = [], action) => {
     if (action.type === 'FETCH_USER') {
@@ -139,5 +147,6 @@ export default combineReducers({
     spellSlots: spellSlotsReducer,
     currentUser: authReducer,
     errorMessage: sendErrorMessageReducer,
-    loginStatus: loginStatusReducer
+    loginStatus: loginStatusReducer,
+    appReady: appReadyReducer
 });

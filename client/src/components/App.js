@@ -5,11 +5,11 @@ import Spellbook from "./Spellbook";
 import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
 import ErrorMessage from "./ErrorMessage";
-import { fetchAPIData, getCurrentUser, checkLogInStatus } from "../actions"
+import { fetchAPIData, getCurrentUser, checkLogInStatus, appReadytoRender } from "../actions"
 
 class App extends Component {
   state = {
-    activeItem: 'Daily Spells',
+    activeItem: 'Prepared Spells',
     windowWidth: document.documentElement.clientWidth,
     mobileSidebarVisible: false
   };
@@ -18,17 +18,22 @@ class App extends Component {
     this.setState({ activeItem: name, mobileSidebarVisible: false });
   };
 
-  componentDidMount() {
-    this.props.fetchAPIData();
-    this.props.checkLogInStatus();
-    this.props.getCurrentUser();
+  async componentDidMount() {
+    try {
+      await this.props.fetchAPIData();
+      await this.props.checkLogInStatus();
+      await this.props.getCurrentUser();
+    } catch (err) {
+      console.log(err);
+    }
     window.addEventListener('resize', () => {
       this.setState({ windowWidth: document.documentElement.clientWidth })
-    })
+    });
+    this.props.appReadytoRender();
   };
 
   renderActiveTab() {
-    if (this.state.activeItem === 'Daily Spells') {
+    if (this.state.activeItem === 'Prepared Spells') {
       return <DailySpells />;
     } else if (this.state.activeItem === 'Spell Book') {
       return <Spellbook />;
@@ -65,9 +70,9 @@ class App extends Component {
       <div>
         <Menu size='large' attached='top' tabular>
           <Menu.Item
-            name='Daily Spells'
+            name='Prepared Spells'
             icon='magic'
-            active={activeItem === 'Daily Spells'}
+            active={activeItem === 'Prepared Spells'}
             onClick={this.handleItemClick} />
           <Menu.Item
             name='Spell Book'
@@ -106,9 +111,9 @@ class App extends Component {
           vertical
           visible={this.state.mobileSidebarVisible}>
           <Menu.Item
-            name='Daily Spells'
+            name='Prepared Spells'
             icon='magic'
-            active={activeItem === 'Daily Spells'}
+            active={activeItem === 'Prepared Spells'}
             onClick={this.handleItemClick} />
           <Menu.Item
             name='Spell Book'
@@ -143,7 +148,7 @@ class App extends Component {
   }
 
   renderAppOnFetchComplete() {
-    if (this.props.apiData.complete) {
+    if (this.props.appReady) {
       return this.state.windowWidth < 767 ? this.renderMobileApp() : this.renderDesktopApp()
     }
     return null;
@@ -152,7 +157,7 @@ class App extends Component {
   render() {
     return (
       <Dimmer.Dimmable>
-        <Dimmer active={!this.props.apiData.complete || this.props.apiData.error}>
+        <Dimmer active={!this.props.appReady || this.props.apiData.error}>
           <img alt='wizard hat' className='wizard-hat-img' src='/wizard-hat.png'
             style={{ 'position': 'relative', 'bottom': this.props.apiData.error ? '0' : '120px' }} />
           {this.props.apiData.error ?
@@ -178,8 +183,9 @@ const mapStateToProps = (state) => {
     apiData: state.apiData,
     currentUser: state.currentUser,
     errorMessage: state.errorMessage,
-    loginStatus: state.loginStatus
+    loginStatus: state.loginStatus,
+    appReady: state.appReady
   };
 };
 
-export default connect(mapStateToProps, { fetchAPIData, getCurrentUser, checkLogInStatus })(App);
+export default connect(mapStateToProps, { fetchAPIData, getCurrentUser, checkLogInStatus, appReadytoRender })(App);
