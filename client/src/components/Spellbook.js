@@ -9,7 +9,7 @@ import { selectSpellbookSpell } from "../actions";
 class Spellbook extends Component {
   render() {
     return (
-      <div>
+      <div className='tabContent'>
         <FilterSpells tabName='spellBookSpells' />
         <SortSpells tabName='spellBookSpells' />
         {this.props.showHeader ? <h3 style={{textAlign: 'center'}}><Icon name='book' /> Spell Book </h3> : null}

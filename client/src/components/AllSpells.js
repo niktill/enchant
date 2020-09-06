@@ -9,7 +9,7 @@ import { selectAllSpellsSpell } from "../actions";
 class AllSpells extends Component {
   render() {
     return (
-      <div>
+      <div className='tabContent'>
         <FilterSpells tabName='allSpells' />
         <SortSpells tabName='allSpells' />
         {this.props.showHeader ? <h3 style={{textAlign: 'center'}}><Icon name='list' /> All Spells </h3> : null}

@@ -11,35 +11,61 @@ class SpellSlots extends Component {
     }
     render() {
         return (
-            <div style={{ 'marginBottom': '10px' }}>
-                <Table stackable celled className='spellSlotsTable' style={{ 'marginBottom': '20px' }}>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan='9'>
-                                <h3 style={{ display: 'inline' }}>Spell Slots</h3>
-                                <Button size='small' content='Refill Spell Slots' style={{ marginLeft: '10px' }} onClick={() => this.props.refillSpellSlots()} />
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Header>
-                        <Table.Row>
-                            {this.spellSlotHeaders.map(el =>
-                                <Table.HeaderCell key={el[0]}>{el}</Table.HeaderCell>)}
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body className='spellSlotNumbers'>
-                        <Table.Row>
+            <div className='spellSlotsTable' style={{ 'marginBottom': '10px' }}>
+                {this.props.mobileTable ?
+                    <Table unstackable definition collasping celled style={{ 'marginBottom': '20px' }}>
+                        <Table.Header fullWidth>
+                            <Table.Row>
+                                <Table.HeaderCell colSpan='2'>
+                                    <h3 style={{ display: 'inline' }}>Spell Slots</h3>
+                                    <Button size='small' content='Refill Spell Slots' style={{ marginLeft: '10px' }} onClick={() => this.props.refillSpellSlots()} />
+                                </Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body className='spellSlotNumbers'>
                             {this.props.spellSlots.map((el, index) =>
-                                <Table.Cell key={index}>
-                                    {el[0] + ' / '}
-                                    <Input size='small' className='setSpellSlotMax' type='number'
-                                        value={el[1].toString()}
-                                        onChange={(event, data) =>
-                                            this.props.setMaxSpellSlots(index + 1, parseInt(data.value))} />
-                                </Table.Cell>)}
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
+                                <Table.Row>
+                                    <Table.Cell key={this.spellSlotHeaders[index]}>{this.spellSlotHeaders[index]}</Table.Cell>
+                                    <Table.Cell key={index}>
+                                        {el[0] + ' / '}
+                                        <Input size='small' className='setSpellSlotMax' type='number'
+                                            value={el[1].toString()}
+                                            onChange={(event, data) =>
+                                                this.props.setMaxSpellSlots(index + 1, parseInt(data.value))} />
+                                    </Table.Cell>
+                                </Table.Row>)}
+                        </Table.Body>
+                    </Table>
+                    :
+                    <Table celled style={{ 'marginBottom': '20px' }}>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell colSpan='9'>
+                                    <h3 style={{ display: 'inline' }}>Spell Slots</h3>
+                                    <Button size='small' content='Refill Spell Slots' style={{ marginLeft: '10px' }} onClick={() => this.props.refillSpellSlots()} />
+                                </Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Header>
+                            <Table.Row>
+                                {this.spellSlotHeaders.map(el =>
+                                    <Table.HeaderCell key={el[0]}>{el}</Table.HeaderCell>)}
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body className='spellSlotNumbers'>
+                            <Table.Row>
+                                {this.props.spellSlots.map((el, index) =>
+                                    <Table.Cell key={index}>
+                                        {el[0] + ' / '}
+                                        <Input size='small' className='setSpellSlotMax' type='number'
+                                            value={el[1].toString()}
+                                            onChange={(event, data) =>
+                                                this.props.setMaxSpellSlots(index + 1, parseInt(data.value))} />
+                                    </Table.Cell>)}
+                            </Table.Row>
+                        </Table.Body>
+                    </Table>
+                }
             </div>
         );
     }

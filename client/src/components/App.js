@@ -34,13 +34,13 @@ class App extends Component {
 
   renderActiveTab() {
     if (this.state.activeItem === 'Prepared Spells') {
-      return <DailySpells />;
+      return <DailySpells windowWidth={this.state.windowWidth} />;
     } else if (this.state.activeItem === 'Spell Book') {
       return <Spellbook showHeader={this.state.windowWidth <= 767} />;
     } else if (this.state.activeItem === 'All Spells') {
       return <AllSpells showHeader={this.state.windowWidth <= 767} />;
     } else {
-      return <DailySpells />;
+      return <DailySpells windowWidth={this.state.windowWidth} />;
     }
   }
 

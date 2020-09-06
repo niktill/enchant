@@ -9,8 +9,8 @@ import SpellSlots from './SpellSlots';
 class DailySpells extends Component {
   render() {
     return (
-      <div>
-        <SpellSlots />
+      <div className='tabContent dailySpells'>
+        <SpellSlots mobileTable={this.props.windowWidth <= 767} />
         <FilterSpells tabName='dailySpells' />
         <SortSpells tabName='dailySpells' />
         <h3 style={{textAlign: 'center'}}><Icon name='magic'/> Prepared Spells</h3>
