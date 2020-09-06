@@ -7,7 +7,7 @@ Enchant is a D&D 5e Spell Book web application built with React-Redux, ExpressJS
 Enchant can be accessed at this url: https://enchant-spellbook.herokuapp.com/
 
 ### Step 1 -- Logging In (Optional):
-To save your Enchant activity, click on the log in link at the top right. You will be given the option to sign in with you Google or Facebook Account. *Please note that you can fully use Enchant without logging in*, but all of your activity will be gone after leaving the page.
+To allow Enchant to save your activity, log in to a Google or Facebook account by clicking on the log in link at the top right.**Please note that you can fully use Enchant without logging in**, but all of your activity will be gone after leaving the page.
 
 ### Step 2 -- Select Spells from All Spells:
 Click on the "All Spells" tab to view all 5e D&D spells. Selecting these spells will add or remove them to your spell book. Hovering over a spell will provide the statistics for it. These spells can be sorted by level, school, alphabetically and reverse alphabetically by clicking on the "Sort" button above. These spells can be filtered by class by clicking on the "Filter" button above. Please note deselecting a spell will remove it from both your Prepared Spells and Spellbook.
