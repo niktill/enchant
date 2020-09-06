@@ -13,7 +13,7 @@ class SpellSlots extends Component {
         return (
             <div className='spellSlotsTable' style={{ 'marginBottom': '10px' }}>
                 {this.props.mobileTable ?
-                    <Table unstackable definition collasping celled style={{ 'marginBottom': '20px' }}>
+                    <Table unstackable definition celled style={{ 'marginBottom': '20px' }}>
                         <Table.Header fullWidth>
                             <Table.Row>
                                 <Table.HeaderCell colSpan='2'>
@@ -24,8 +24,8 @@ class SpellSlots extends Component {
                         </Table.Header>
                         <Table.Body className='spellSlotNumbers'>
                             {this.props.spellSlots.map((el, index) =>
-                                <Table.Row>
-                                    <Table.Cell key={this.spellSlotHeaders[index]}>{this.spellSlotHeaders[index]}</Table.Cell>
+                                <Table.Row key={this.spellSlotHeaders[index]}>
+                                    <Table.Cell>{this.spellSlotHeaders[index]}</Table.Cell>
                                     <Table.Cell key={index}>
                                         {el[0] + ' / '}
                                         <Input size='small' className='setSpellSlotMax' type='number'

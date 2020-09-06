@@ -103,7 +103,7 @@ class App extends Component {
   renderMobileApp() {
     const { activeItem } = this.state;
     return (
-      <Sidebar.Pushable as={Segment} style={{ marginTop: '0' }}> 
+      <Sidebar.Pushable as={Segment} style={{ marginTop: '0' }}>
         <Sidebar
           as={Menu}
           animation='overlay'
@@ -148,7 +148,7 @@ class App extends Component {
   }
 
   renderAppOnFetchComplete() {
-    if (this.props.appReady) {
+    if (this.props.appReady && !this.props.apiData.error) {
       return this.state.windowWidth <= 767 ? this.renderMobileApp() : this.renderDesktopApp()
     }
     return null;
@@ -158,18 +158,17 @@ class App extends Component {
     return (
       <Dimmer.Dimmable>
         <Dimmer active={!this.props.appReady || this.props.apiData.error}>
-          <img alt='wizard hat' className='wizard-hat-img' src='/wizard-hat.png'
-            style={{ 'position': 'relative', 'bottom': this.props.apiData.error ? '0' : '120px' }} />
-          {this.props.apiData.error ?
-            <Message size='large' negative textAlign='center'>
-              <Message.Header>Error in loading Enchant</Message.Header>
-              <p>We had issues preparing our spells. Please refresh page to try again.</p>
-            </Message>
-            :
-            <Loader size='massive' content={
-              <div>
-                Loading Enchant
-              </div>} />}
+          <div className='popout'>
+            <img alt='wizard hat' className='wizard-hat-img' src='/wizard-hat.png'
+              style={{ 'position': 'relative', 'bottom': this.props.apiData.error ? '0' : '120px' }} />
+            {this.props.apiData.error ?
+              <Message size='large' negative>
+                <Message.Header>Error in loading Enchant</Message.Header>
+                <p>We had issues preparing our spells. Please refresh page to try again.</p>
+              </Message>
+              :
+              <Loader style={{whiteSpace: 'nowrap'}} size='massive' content={'Loading Enchant'} />}
+          </div>
         </Dimmer>
         {this.renderAppOnFetchComplete()}
         <ErrorMessage className='enchant-error-message' />

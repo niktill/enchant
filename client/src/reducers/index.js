@@ -3,9 +3,9 @@ import { combineReducers } from 'redux';
 // reducer to check status of login
 const loginStatusReducer = (loginStatus=0, action) => {
     if (action.type === 'LOG_IN_STATUS_SUCCESS') {
-        return 1;
+        return true;
     } else if (action.type === 'LOG_IN_STATUS_FAIL') {
-        return 0;
+        return false;
     }
     return loginStatus;
 };
@@ -22,9 +22,9 @@ const authReducer = (user=null, action) => {
 const fetchAPIDataReducer = (apiData = {}, action) => {
     if (action.type === 'API_DATA_FETCHED') {
         apiData = action.payload;
-        apiData.complete = 1;
+        apiData.complete = true;
     } else if (action.type === 'API_DATA_ERROR') {
-        apiData = { ...apiData, error: 1 };
+        apiData = { ...apiData, error: true };
     }
     return apiData;
 };
