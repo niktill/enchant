@@ -38,7 +38,7 @@ class DailySpellListItem extends Component {
                 <Modal.Actions>
                     {(this.props.spell.level_int !== 0) ?
                         <p key='-cast-message' size='small' style={{
-                            'display': 'inline',
+                            'display': 'inline-block',
                             'color': (this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ? 'red' : ''
                         }}>
                             {(this.props.spellSlots[this.props.spell.level_int - 1][0] === 0) ?
