@@ -1,5 +1,8 @@
 const passport = require('passport');
+const express = require('express');
 const mongoose = require('mongoose');
+const User = mongoose.model('users');
+const path = require('path');
 
 module.exports = (app) => {
     app.get('/auth/google',
@@ -25,6 +28,20 @@ module.exports = (app) => {
             res.send(req.user);
         } else {
             res.sendStatus(404);
+        }
+    });
+
+    app.delete('/api/current_user', async (req, res) => {
+        if (req.user) {
+            const user = await User.findByIdAndDelete(req.user.id);
+            if (user) {
+                req.logout();
+                res.send(200);
+            } else {
+                res.sendStatus(500);
+            }
+        } else {
+            res.sendStatus(400);
         }
     });
 

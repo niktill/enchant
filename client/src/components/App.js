@@ -5,6 +5,7 @@ import Spellbook from "./Spellbook";
 import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
 import ErrorMessage from "./ErrorMessage";
+import AccountSettings from "./AccountSettings";
 import { fetchAPIData, getCurrentUser, checkLogInStatus, appReadytoRender } from "../actions"
 
 class App extends Component {
@@ -44,9 +45,12 @@ class App extends Component {
     }
   }
 
-  renderLoginMenuItem() {
+  renderLoginMenuItems() {
     if (this.props.currentUser) {
-      return <Menu.Item name='Log Out' icon='log out' href='/api/logout' />;
+      return [
+        <AccountSettings key='accountSettings' />,
+        <Menu.Item key='logout' name='Log Out' icon='log out' href='/api/logout' />
+      ];
     }
     return (
       <Popup on='click' position='bottom right'
@@ -90,7 +94,7 @@ class App extends Component {
           </Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
-            {this.renderLoginMenuItem()}
+            {this.renderLoginMenuItems()}
           </Menu.Menu>
         </Menu>
         <Segment attached='bottom'>
@@ -167,7 +171,7 @@ class App extends Component {
                 <p>We had issues preparing our spells. Please refresh page to try again.</p>
               </Message>
               :
-              <Loader style={{whiteSpace: 'nowrap'}} size='massive' content={'Loading Enchant'} />}
+              <Loader style={{ whiteSpace: 'nowrap' }} size='massive' content={'Loading Enchant'} />}
           </div>
         </Dimmer>
         {this.renderAppOnFetchComplete()}

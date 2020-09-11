@@ -65,6 +65,10 @@
     width: 100px;
 }
 
+#deleteImage {
+    margin-top: 50px;
+}
+
 .error-message-container {
     position: absolute;
     top: 20px;

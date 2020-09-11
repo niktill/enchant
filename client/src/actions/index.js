@@ -36,6 +36,25 @@ export const getCurrentUser = () => async (dispatch, getState) => {
     }
 }
 
+// Delete current user from database
+export const deleteCurrentUser = () => async (dispatch, getState) => {
+    const { currentUser } = getState();
+    if (currentUser) {
+        try {
+            const res = await axios.delete('/api/current_user');
+            if (res.status === 200) {
+                window.location.href='/accountDeleted.html';
+            }
+        } catch (err) {
+            dispatch({ // error in deleting current user
+                type: 'ACTIVATE_ERROR_MESSAGE',
+                payload: { type: 'Error in deleting account', message: 'Could not delete your account. Please contact an admin.' }
+            });
+            throw err;
+        }
+    }
+}
+
 // Fetch API data Action Creator
 export const fetchAPIData = () => async (dispatch) => {
     const listOfNonSpellCasters = ['Barbarian', 'Fighter', 'Monk', 'Rogue'];
