@@ -15,15 +15,15 @@ class AccountSettings extends Component {
 
     validateDeleteInput(data) {
         if (data.value === 'delete account') {
-            return this.setState({deleteEnabled: true})
+            return this.setState({ deleteEnabled: true })
         }
-        return this.setState({deleteEnabled: false})
+        return this.setState({ deleteEnabled: false })
     }
 
     deleteAccount() {
         try {
             this.props.deleteCurrentUser()
-        } catch(err) {
+        } catch (err) {
             this.setOpen(false)
         }
     }
@@ -31,7 +31,11 @@ class AccountSettings extends Component {
     render() {
         return (
             <Modal closeIcon
-                trigger={<Menu.Item><Icon name='setting' /></Menu.Item>}
+                trigger={
+                    <Menu.Item>
+                        <Icon name='setting' />
+                        {this.props.mobile ? 'Settings' : null}
+                    </Menu.Item>}
                 open={this.state.open}
                 onClose={() => this.setOpen(false)}
                 onOpen={() => this.setOpen(true)}>
@@ -44,10 +48,11 @@ class AccountSettings extends Component {
                         trigger={<Button negative>Delete Account</Button>}
                         content={
                             <div>
-                                To complete account deletion please type "delete account" into the field below
-                                <Input style={{ marginTop: '10px' }} type='text' onChange={(e, data)=> this.validateDeleteInput(data)} />
+                                To complete account deletion please type "delete account" into the field
+                                and the click the button below.
+                                <Input style={{ marginTop: '10px' }} type='text' onChange={(e, data) => this.validateDeleteInput(data)} />
                                 <Button style={{ marginTop: '10px' }} negative
-                                    disabled={!this.state.deleteEnabled} 
+                                    disabled={!this.state.deleteEnabled}
                                     onClick={() => this.deleteAccount()}>
                                     Delete Account
                                 </Button>

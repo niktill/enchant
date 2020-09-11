@@ -45,12 +45,9 @@ class App extends Component {
     }
   }
 
-  renderLoginMenuItems() {
+  renderLoginMenuItem() {
     if (this.props.currentUser) {
-      return [
-        <AccountSettings key='accountSettings' />,
-        <Menu.Item key='logout' name='Log Out' icon='log out' href='/api/logout' />
-      ];
+      return <Menu.Item name='Log Out' icon='log out' href='/api/logout' />;
     }
     return (
       <Popup on='click' position='bottom right'
@@ -88,13 +85,10 @@ class App extends Component {
             icon='list'
             active={activeItem === 'All Spells'}
             onClick={this.handleItemClick} />
-          <Menu.Item style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-            <img alt='wizard hat' src='wizard-hat.png' style={{ height: '30px', width: '30px', marginRight: '10px' }} />
-            <h3 style={{ margin: '0' }}>Enchant</h3>
-          </Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
-            {this.renderLoginMenuItems()}
+            <AccountSettings />
+            {this.renderLoginMenuItem()}
           </Menu.Menu>
         </Menu>
         <Segment attached='bottom'>
@@ -129,6 +123,7 @@ class App extends Component {
             name='All Spells'
             active={activeItem === 'All Spells'}
             onClick={this.handleItemClick} />
+          <AccountSettings mobile />
           <Menu.Item content='Help' icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
         </Sidebar>
 

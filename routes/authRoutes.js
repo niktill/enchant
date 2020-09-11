@@ -2,7 +2,6 @@ const passport = require('passport');
 const express = require('express');
 const mongoose = require('mongoose');
 const User = mongoose.model('users');
-const path = require('path');
 
 module.exports = (app) => {
     app.get('/auth/google',
