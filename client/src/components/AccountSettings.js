@@ -30,36 +30,38 @@ class AccountSettings extends Component {
 
     render() {
         return (
-            <Modal closeIcon
-                trigger={
-                    <Menu.Item>
-                        <Icon name='setting' />
-                        {this.props.mobile ? 'Settings' : null}
-                    </Menu.Item>}
-                open={this.state.open}
-                onClose={() => this.setOpen(false)}
-                onOpen={() => this.setOpen(true)}>
-                <Modal.Header>Account Settings</Modal.Header>
-                <Modal.Content style={{ textAlign: 'left' }}>
-                    <Popup
-                        size='large'
-                        wide
-                        on='click'
-                        trigger={<Button negative>Delete Account</Button>}
-                        content={
-                            <div>
-                                To complete account deletion please type "delete account" into the field
-                                and the click the button below.
+            this.props.currentUser ?
+                <Modal closeIcon
+                    trigger={
+                        <Menu.Item>
+                            <Icon name='setting' />
+                            {this.props.mobile ? 'Account Settings' : null}
+                        </Menu.Item>}
+                    open={this.state.open}
+                    onClose={() => this.setOpen(false)}
+                    onOpen={() => this.setOpen(true)}>
+                    <Modal.Header>Account Settings</Modal.Header>
+                    <Modal.Content style={{ textAlign: 'left' }}>
+                        <Popup
+                            size='large'
+                            wide
+                            on='click'
+                            trigger={<Button negative>Delete Account</Button>}
+                            content={
+                                <div>
+                                    To complete account deletion please type "delete account" into the field
+                                    and the click the button below.
                                 <Input style={{ marginTop: '10px' }} type='text' onChange={(e, data) => this.validateDeleteInput(data)} />
-                                <Button style={{ marginTop: '10px' }} negative
-                                    disabled={!this.state.deleteEnabled}
-                                    onClick={() => this.deleteAccount()}>
-                                    Delete Account
+                                    <Button style={{ marginTop: '10px' }} negative
+                                        disabled={!this.state.deleteEnabled}
+                                        onClick={() => this.deleteAccount()}>
+                                        Delete Account
                                 </Button>
-                            </div>
-                        } />
-                </Modal.Content>
-            </Modal>
+                                </div>
+                            } />
+                    </Modal.Content>
+                </Modal>
+                : null
         );
     }
 }
