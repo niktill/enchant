@@ -76,7 +76,7 @@ class AccountSettings extends Component {
                     <div>
                         <h3 style={{ marginTop: '10px' }}>Delete Account</h3>
                         <p style={{ display: 'block' }}>
-                            To complete account deletion please type "delete account" into the field
+                            To delete your account please type "delete account" into the field
                             and then click the button below. Please note account deletion will also revoke your
                             Google or Facebook account authorization of this app.
                         </p>
