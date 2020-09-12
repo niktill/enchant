@@ -49,6 +49,8 @@ const spellbookSpellsReducer = (spellBookSpells = [], action) => {
             return spellBookSpells.filter(spell => spell.slug !== action.payload.slug);
         }
         return [...spellBookSpells, action.payload];
+    } else if (action.type === 'RESET_ACCOUNT') {
+        return [];
     }
     return spellBookSpells;
 };
@@ -67,6 +69,8 @@ const dailySpellsReducer = (dailySpells = [], action) => {
         return [...dailySpells, action.payload];
     } else if (action.type === 'ALL_SPELLS_SPELL_SELECT') {
         return dailySpells.filter(spell => spell.slug !== action.payload.slug);
+    } else if (action.type === 'RESET_ACCOUNT') {
+        return [];
     }
     return dailySpells;
 };
@@ -124,18 +128,32 @@ const spellSlotsReducer = (spellSlots = spellSlotsDefault, action) => {
             action.payload.maxSpellSlots : spellSlots[action.payload.spellLevel - 1][0]
         return spellSlots.map((el, index) => ((index + 1) === action.payload.spellLevel) ?
             [newCurSpellSlots, action.payload.maxSpellSlots] : el);
+    } else if (action.type === 'RESET_ACCOUNT') {
+        return spellSlotsDefault;
     }
     return spellSlots;
 };
 
 // Send error message reducer
-const sendErrorMessageReducer = (errorMessage={}, action) => {
+const sendEnchantMessageReducer = (enchantMessage={}, action) => {
     if (action.type === 'ACTIVATE_ERROR_MESSAGE') {
-        return { type: action.payload.type, message: action.payload.message, active: true};
-    } else if (action.type === 'CLOSE_ERROR_MESSAGE') {
-        return {...errorMessage, active: false}
+        return { 
+            header: action.payload.header, 
+            message: action.payload.message, 
+            type: 'error',
+            active: true
+        };
+    } else if (action.type === 'ACTIVATE_SUCCESS_MESSAGE') {
+        return { 
+            header: action.payload.header, 
+            message: action.payload.message, 
+            type: 'success',
+            active: true, 
+        };
+    } else if (action.type === 'CLOSE_ENCHANT_MESSAGE') {
+        return {...enchantMessage, active: false}
     }
-    return {...errorMessage}
+    return {...enchantMessage}
 };
 
 export default combineReducers({
@@ -146,7 +164,7 @@ export default combineReducers({
     selectedSorter: selectSortingReducer,
     spellSlots: spellSlotsReducer,
     currentUser: authReducer,
-    errorMessage: sendErrorMessageReducer,
+    enchantMessage: sendEnchantMessageReducer,
     loginStatus: loginStatusReducer,
     appReady: appReadyReducer
 });

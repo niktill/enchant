@@ -11,7 +11,11 @@ export const checkLogInStatus = () => async (dispatch, getState) => {
         dispatch({ type: 'LOG_IN_STATUS_FAIL' });
         dispatch({
             type: 'ACTIVATE_ERROR_MESSAGE',
-            payload: { type: 'Log in currently unavailable', message: 'We are currently facing an issue with our log in service. Sorry!' }
+            payload: { 
+                header: 'Log in currently unavailable', 
+                message: 'We are currently facing an issue with our log in service. Sorry!',
+                type: 'error' 
+            }
         });
         throw err;
     }
@@ -43,12 +47,44 @@ export const deleteCurrentUser = () => async (dispatch, getState) => {
         try {
             const res = await axios.delete('/api/current_user');
             if (res.status === 200) {
-                window.location.href='/accountDeleted.html';
+                window.location.href = '/accountDeleted.html';
             }
         } catch (err) {
             dispatch({ // error in deleting current user
                 type: 'ACTIVATE_ERROR_MESSAGE',
-                payload: { type: 'Error in deleting account', message: 'Could not delete your account. Please contact an admin.' }
+                payload: { header: 'Error in deleting account', 
+                message: 'Could not delete your account. Please contact an admin.',
+                type: 'error'
+            }
+            });
+            throw err;
+        }
+    }
+}
+
+// reset current user
+export const resetCurrentUser = () => async (dispatch, getState) => {
+    const { currentUser } = getState();
+    if (currentUser) {
+        try {
+            await axios.post('/api/current_user/reset');
+            dispatch({type: 'RESET_ACCOUNT'});
+            return dispatch({ // successfully reset of current user
+                type: 'ACTIVATE_SUCCESS_MESSAGE',
+                payload: { 
+                    header: 'Account successfully reset', 
+                    message: 'Your account has been reset.',
+                    type: 'success' 
+                }
+            });
+        } catch (err) {
+            dispatch({ // error in deleting current user
+                type: 'ACTIVATE_ERROR_MESSAGE',
+                payload: { 
+                    header: 'Error in reseting account', 
+                    message: 'Could not reset your account. Please try again.',
+                    type: 'error' 
+                }
             });
             throw err;
         }
@@ -70,7 +106,7 @@ export const fetchAPIData = () => async (dispatch) => {
             }
         }
         // Fetch class data from API
-        let response = await dnd5eapi.get('/classes');
+        let response = await dnd5eapi.get('/classes/');
         if (response.status === 200) {
             data.classes = response.data.results.filter(classFromAPI => !listOfNonSpellCasters.includes(classFromAPI.name));
         }
@@ -103,7 +139,11 @@ export const selectSpellbookSpell = (spell) => async (dispatch, getState) => {
         } catch {
             dispatch({ // error in saving spell book spell to account
                 type: 'ACTIVATE_ERROR_MESSAGE',
-                payload: { type: 'Error in selecting spellbook spell', message: 'Could not save spellbook spell selection to your account.' }
+                payload: { 
+                    header: 'Error in selecting spellbook spell', 
+                    message: 'Could not save spellbook spell selection to your account.',
+                    type: 'error' 
+                }
             });
         }
     }
@@ -128,7 +168,11 @@ export const selectAllSpellsSpell = (spell) => async (dispatch, getState) => {
         } catch { // error in saving all spell select to account
             dispatch({
                 type: 'ACTIVATE_ERROR_MESSAGE',
-                payload: { type: 'Error in selecting spell', message: 'Could not save spell select to your account.' }
+                payload: { header: 
+                    'Error in selecting spell', 
+                    message: 'Could not save spell select to your account.',
+                    type: 'error' 
+                }
             });
         }
 
@@ -163,7 +207,11 @@ export const castSpell = (spellLevel) => async (dispatch, getState) => {
         } catch { // error in saving spell cast to account
             dispatch({
                 type: 'ACTIVATE_ERROR_MESSAGE',
-                payload: { type: 'Error in casting spell', message: 'Could not save spell cast to your account.' }
+                payload: { 
+                    header: 'Error in casting spell', 
+                    message: 'Could not save spell cast to your account.',
+                    type: 'error' 
+                }
             });
         }
     }
@@ -181,7 +229,11 @@ export const refillSpellSlots = () => async (dispatch, getState) => {
         } catch { // error in saving refill spell slots to account
             dispatch({
                 type: 'ACTIVATE_ERROR_MESSAGE',
-                payload: { type: 'Error in refilling spell slots', message: 'Could not save spell slot refill to your account.' }
+                payload: { 
+                    header: 'Error in refilling spell slots', 
+                    message: 'Could not save spell slot refill to your account.',
+                    type: 'error'
+                }
             });
         }
     }
@@ -204,7 +256,11 @@ export const setMaxSpellSlots = (spellLevel, maxSpellSlots) => async (dispatch, 
         } catch { // error in setting max spell slot to account
             dispatch({
                 type: 'ACTIVATE_ERROR_MESSAGE',
-                payload: { type: 'Error in setting spell slots', message: 'Could not save spell slots change to your account.' }
+                payload: { 
+                    header: 'Error in setting spell slots', 
+                    message: 'Could not save spell slots change to your account.',
+                    type: 'error' 
+                }
             });
         }
     }
@@ -212,8 +268,8 @@ export const setMaxSpellSlots = (spellLevel, maxSpellSlots) => async (dispatch, 
 };
 
 // Close Error Message Action Creator
-export const closeErrorMessage = () => {
+export const closeEnchantMessage = () => {
     return {
-        type: 'CLOSE_ERROR_MESSAGE'
+        type: 'CLOSE_ENCHANT_MESSAGE'
     };
 };

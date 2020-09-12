@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
     googleId: String,
     facebookId: String,
+    accessToken: String,
     spellBookSpells: Array,
     dailySpells: Array,
     spellSlots: {

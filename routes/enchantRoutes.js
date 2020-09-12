@@ -80,4 +80,24 @@ module.exports = (app) => {
             res.sendStatus(400);
         }
     });
+
+    app.post('/api/current_user/reset', async (req, res) => {
+        if (req.user) {
+            try {
+                const user = await User.findOneAndUpdate(req.user.id,
+                    {
+                        spellBookSpells: [],
+                        dailySpells: [],
+                        spellSlots: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+                    });
+                if (user) {
+                    res.send(200);
+                }
+            } catch (err) {
+                res.sendStatus(500);
+            }
+        } else {
+            res.sendStatus(400);
+        }
+    });
 }

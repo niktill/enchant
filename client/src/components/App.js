@@ -4,7 +4,7 @@ import { Loader, Dimmer, Message, Sidebar, Menu, Segment, Popup, Button, Icon } 
 import Spellbook from "./Spellbook";
 import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
-import ErrorMessage from "./ErrorMessage";
+import EnchantMessage from "./EnchantMessage";
 import AccountSettings from "./AccountSettings";
 import { fetchAPIData, getCurrentUser, checkLogInStatus, appReadytoRender } from "../actions"
 
@@ -87,7 +87,7 @@ class App extends Component {
             onClick={this.handleItemClick} />
           <Menu.Menu position='right'>
             <Menu.Item icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
-            <AccountSettings />
+            {this.props.currentUser ? <AccountSettings /> : null }
             {this.renderLoginMenuItem()}
           </Menu.Menu>
         </Menu>
@@ -123,7 +123,7 @@ class App extends Component {
             name='All Spells'
             active={activeItem === 'All Spells'}
             onClick={this.handleItemClick} />
-          <AccountSettings mobile />
+          {this.props.currentUser ? <AccountSettings mobile /> : null }
           <Menu.Item content='Help' icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
         </Sidebar>
 
@@ -170,7 +170,7 @@ class App extends Component {
           </div>
         </Dimmer>
         {this.renderAppOnFetchComplete()}
-        <ErrorMessage className='enchant-error-message' />
+        <EnchantMessage className='enchant-error-message' />
       </Dimmer.Dimmable>
     );
   }
@@ -180,7 +180,7 @@ const mapStateToProps = (state) => {
   return {
     apiData: state.apiData,
     currentUser: state.currentUser,
-    errorMessage: state.errorMessage,
+    enchantMessage: state.enchantMessage,
     loginStatus: state.loginStatus,
     appReady: state.appReady
   };
