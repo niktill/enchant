@@ -103,6 +103,7 @@ class App extends Component {
     return (
       <Sidebar.Pushable as={Segment} style={{ marginTop: '0' }}>
         <Sidebar
+          size='large'
           as={Menu}
           animation='overlay'
           onHide={() => this.setState({ mobileSidebarVisible: false })}
