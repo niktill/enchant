@@ -31,7 +31,7 @@ class AccountSettings extends Component {
     deleteAccount() {
         try {
             this.props.deleteCurrentUser()
-            this.setState({deleteEnabled: false, resetEnabled: false});
+            this.setState({ deleteEnabled: false, resetEnabled: false });
         } catch (err) {
             this.setOpen(false)
         }
@@ -40,7 +40,7 @@ class AccountSettings extends Component {
     resetAccount() {
         try {
             this.props.resetCurrentUser()
-            this.setState({deleteEnabled: false, resetEnabled: false});
+            this.setState({ deleteEnabled: false, resetEnabled: false });
             this.setOpen(false)
         } catch (err) {
             this.setOpen(false)
@@ -67,7 +67,9 @@ class AccountSettings extends Component {
                             please type "reset account" into the field and then click the button below.
                         </p>
                         <Input style={{ marginTop: '5px' }} type='text' onChange={(e, data) => this.validateResetInput(data)} />
-                        <Button style={{ marginLeft: '5px' }} negative
+                        {this.props.mobile ? <br /> : null}
+                        <Button style={this.props.mobile ? { marginTop: '10px' } : { marginLeft: '10px' }}
+                            negative
                             disabled={!this.state.resetEnabled}
                             onClick={() => this.resetAccount()}>
                             Reset Account
@@ -81,7 +83,9 @@ class AccountSettings extends Component {
                             Google or Facebook account authorization of this app.
                         </p>
                         <Input style={{ marginTop: '5px' }} type='text' onChange={(e, data) => this.validateDeleteInput(data)} />
-                        <Button style={{ marginLeft: '5px' }} negative
+                        {this.props.mobile ? <br /> : null}
+                        <Button style={this.props.mobile ? { marginTop: '10px' } : { marginLeft: '10px' }}
+                            negative
                             disabled={!this.state.deleteEnabled}
                             onClick={() => this.deleteAccount()}>
                             Delete Account

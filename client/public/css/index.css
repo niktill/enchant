@@ -69,11 +69,11 @@
     margin-top: 50px;
 }
 
-.error-message-container {
+.enchant-message-container {
     position: absolute;
     top: 20px;
     right: 20px;
-    width: 25%;
+    width: 300px;
 }
 
 .mobile-spell-check-icon {
@@ -133,5 +133,8 @@
     }
     .tabContent.dailySpells {
         margin-top: 0;
+    }
+    .enchant-message-container {
+        width: 70%;
     }
   }

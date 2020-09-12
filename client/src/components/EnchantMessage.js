@@ -10,7 +10,7 @@ class EnchantMessage extends Component {
     render() {
         if (this.props.enchantMessage.active) {
             return (
-                <div className='error-message-container popout' style={{ 'textAlign': 'center' }}>
+                <div className='enchant-message-container popout' style={{ 'textAlign': 'center' }}>
                     <Message onDismiss={() => this.handleDismiss()}
                         negative={this.props.enchantMessage.type === 'error'}
                         positive={this.props.enchantMessage.type === 'success'}>
