@@ -56,11 +56,11 @@ class App extends Component {
           <div className='login-container'>
             <Button style={{ 'marginTop': '10px' }} color='red' href='/auth/google'>
               <Icon name='google' />
-          Sign in with Google
+          Log in with Google
         </Button>
             <Button style={{ 'marginTop': '10px' }} color='blue' href='/auth/facebook'>
               <Icon name='facebook' />
-          Sign in with Facebook
+          Log in with Facebook
         </Button>
           </div>} />);
   }

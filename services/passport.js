@@ -49,7 +49,7 @@ passport.use(new FacebookStrategy({
             done(null, existingUser);
         } else {
             // new user
-            const user = await new User({ facebookId: profile.id }).save()
+            const user = await new User({ facebookId: profile.id, accessToken: accessToken }).save()
             done(null, user);
         }
     })

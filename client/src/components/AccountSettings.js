@@ -75,12 +75,12 @@ class AccountSettings extends Component {
                             Reset Account
                         </Button>
                     </div>
-                    <div>
-                        <h3 style={{ marginTop: '10px' }}>Delete Account</h3>
+                    <div style={{ marginTop: '20px' }}>
+                        <h3>Delete Account</h3>
                         <p style={{ display: 'block' }}>
                             To delete your account please type "delete account" into the field
-                            and then click the button below. Please note account deletion will also revoke your
-                            Google or Facebook account authorization of this app.
+                            and then click the button below. Please note account deletion will also remove this
+                            from your Google or Facebook account.
                         </p>
                         <Input style={{ marginTop: '5px' }} type='text' onChange={(e, data) => this.validateDeleteInput(data)} />
                         {this.props.mobile ? <br /> : null}

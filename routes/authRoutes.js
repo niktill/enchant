@@ -10,17 +10,19 @@ module.exports = (app) => {
         })
     );
 
-    app.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
-        res.redirect('/');
-    });
+    app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
+        (req, res) => {
+            res.redirect('/');
+        });
 
     app.get('/auth/facebook',
         passport.authenticate('facebook')
     );
 
-    app.get('/auth/facebook/callback', passport.authenticate('facebook'), (req, res) => {
-        res.redirect('/');
-    });
+    app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }),
+        (req, res) => {
+            res.redirect('/');
+        });
 
     app.get('/api/current_user', (req, res) => {
         if (req.user) {
@@ -34,10 +36,16 @@ module.exports = (app) => {
         if (req.user) {
             try {
                 const user = await User.findByIdAndDelete(req.user.id);
-                if (user) {
-                    await axios.post('https://oauth2.googleapis.com/revoke?token=' + req.user.accessToken);
+                if (user) { // user successfully deleted from database
+                    if (user.accessToken) { // try to revoke app permissions from google or facebook
+                        if (user.googleId) {
+                            axios.post('https://oauth2.googleapis.com/revoke?token=' + req.user.accessToken);
+                        } else if (user.facebookId) {
+                            axios.delete('https://graph.facebook.com/' + user.facebookId + '/permissions?access_token=' + user.accessToken);
+                        }
+                    }
                     req.logout();
-                    res.send(200);
+                    res.sendStatus(200);
                 }
             } catch (err) {
                 res.sendStatus(500);
