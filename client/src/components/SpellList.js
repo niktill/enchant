@@ -8,6 +8,12 @@ import { selectAllSpellsSpell } from "../actions";
 import isMobile from '../isMobile';
 
 class SpellList extends Component {
+  constructor() {
+    super();
+    this.maxSpellInColumn = 60;
+    this.maxColumnWidth = 250;
+  }
+
   getFilteredSpells() {
     return this.props.spells.filter((spell) =>
       this.props.selectedFilters[this.props.tabName].classes.some((filterSpellClassNames) =>
@@ -60,13 +66,13 @@ class SpellList extends Component {
     spellsToRender = (selectedSorter.length) ? this.sortSpells(selectedSorter, spellsToRender) : spellsToRender;
     const requiresSorterHeaders = selectedSorter === 'level_int' || selectedSorter === 'school';
     if (numberOfSpells > 0) {
-      const maxSpellInColumn = 60;
-      const numberOfColumns = Math.ceil(numberOfSpells / maxSpellInColumn);
-      let AllSpellsColumns = [];
+      const numberOfColumns = Math.ceil(numberOfSpells / this.maxSpellInColumn);
+      const setMaxColumnWidth = (this.maxColumnWidth * numberOfColumns) <= this.props.appView.windowWidth;
+      const AllSpellsColumns = [];
       for (let columnNum = 1; columnNum < numberOfColumns + 1; columnNum++) {
-        let curSpellIndexMin = 0 + ((columnNum - 1) * maxSpellInColumn);
-        let curSpellIndexMax = (numberOfSpells <= (columnNum * maxSpellInColumn))
-          ? numberOfSpells : (columnNum * maxSpellInColumn) - 1;
+        let curSpellIndexMin = 0 + ((columnNum - 1) * this.maxSpellInColumn);
+        let curSpellIndexMax = (numberOfSpells <= (columnNum * this.maxSpellInColumn))
+          ? numberOfSpells : (columnNum * this.maxSpellInColumn) - 1;
         AllSpellsColumns.push(
           (<Grid.Column key={columnNum}>
             <List selection={this.props.tabName === 'dailySpells' || isMobile}>
@@ -118,7 +124,8 @@ const mapStateToProps = (state) => {
   return {
     spellbookSpells: state.spellbookSpells,
     selectedFilters: state.selectedFilters,
-    selectedSorter: state.selectedSorter
+    selectedSorter: state.selectedSorter,
+    appView: state.appView
   };
 };
 

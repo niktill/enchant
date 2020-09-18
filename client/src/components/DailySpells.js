@@ -10,7 +10,7 @@ class DailySpells extends Component {
   render() {
     return (
       <div className='tabContent dailySpells'>
-        <SpellSlots mobileTable={this.props.windowWidth <= 767} />
+        <SpellSlots />
         <FilterSpells tabName='dailySpells' />
         <SortSpells tabName='dailySpells' />
         <h3 style={{textAlign: 'center'}}><Icon name='magic'/> Prepared Spells</h3>

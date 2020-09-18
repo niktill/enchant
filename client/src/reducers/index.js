@@ -37,6 +37,16 @@ const appReadyReducer = (appReady=false, action) => {
     return appReady;
 };
 
+// Reducer to track app view and screen width
+const currWindowWidth = document.documentElement.clientWidth;
+const appViewReducer = (appView={mobile: currWindowWidth <= 767, windowWidth: currWindowWidth}, action) => {
+    if (action.type === 'SET_APP_VIEW') {
+        const newWindowWidth = action.payload.windowWidth;
+        return {mobile: newWindowWidth <= 767, windowWidth: newWindowWidth};
+    }
+    return appView;
+};
+
 // Reducer that manages spells in spell book
 const spellbookSpellsReducer = (spellBookSpells = [], action) => {
     if (action.type === 'FETCH_USER') {
@@ -166,5 +176,6 @@ export default combineReducers({
     currentUser: authReducer,
     enchantMessage: sendEnchantMessageReducer,
     loginStatus: loginStatusReducer,
-    appReady: appReadyReducer
+    appReady: appReadyReducer,
+    appView: appViewReducer
 });

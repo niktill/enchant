@@ -6,17 +6,12 @@ import DailySpells from "./DailySpells";
 import AllSpells from "./AllSpells";
 import EnchantMessage from "./EnchantMessage";
 import AccountSettings from "./AccountSettings";
-import { fetchAPIData, getCurrentUser, checkLogInStatus, appReadytoRender } from "../actions"
+import { fetchAPIData, getCurrentUser, checkLogInStatus, appReadytoRender, setAppView } from "../actions"
 
 class App extends Component {
   state = {
     activeItem: 'Prepared Spells',
-    windowWidth: document.documentElement.clientWidth,
     mobileSidebarVisible: false
-  };
-
-  handleItemClick = (e, { name }) => {
-    this.setState({ activeItem: name, mobileSidebarVisible: false });
   };
 
   async componentDidMount() {
@@ -28,20 +23,24 @@ class App extends Component {
       console.log(err);
     }
     window.addEventListener('resize', () => {
-      this.setState({ windowWidth: document.documentElement.clientWidth })
+      this.props.setAppView();
     });
     this.props.appReadytoRender();
   };
 
+  handleMenuItemClick = (e, { name }) => {
+    this.setState({ activeItem: name, mobileSidebarVisible: false });
+  };
+
   renderActiveTab() {
     if (this.state.activeItem === 'Prepared Spells') {
-      return <DailySpells windowWidth={this.state.windowWidth} />;
+      return <DailySpells />;
     } else if (this.state.activeItem === 'Spell Book') {
-      return <Spellbook showHeader={this.state.windowWidth <= 767} />;
+      return <Spellbook />;
     } else if (this.state.activeItem === 'All Spells') {
-      return <AllSpells showHeader={this.state.windowWidth <= 767} />;
+      return <AllSpells />;
     } else {
-      return <DailySpells windowWidth={this.state.windowWidth} />;
+      return <DailySpells />;
     }
   }
 
@@ -56,12 +55,12 @@ class App extends Component {
           <div className='login-container'>
             <Button style={{ 'marginTop': '10px' }} color='red' href='/auth/google'>
               <Icon name='google' />
-          Log in with Google
-        </Button>
+                Log in with Google
+            </Button>
             <Button style={{ 'marginTop': '10px' }} color='blue' href='/auth/facebook'>
               <Icon name='facebook' />
-          Log in with Facebook
-        </Button>
+              Log in with Facebook
+            </Button>
           </div>} />);
   }
 
@@ -74,20 +73,20 @@ class App extends Component {
             name='Prepared Spells'
             icon='magic'
             active={activeItem === 'Prepared Spells'}
-            onClick={this.handleItemClick} />
+            onClick={this.handleMenuItemClick} />
           <Menu.Item
             name='Spell Book'
             icon='book'
             active={activeItem === 'Spell Book'}
-            onClick={this.handleItemClick} />
+            onClick={this.handleMenuItemClick} />
           <Menu.Item
             name='All Spells'
             icon='list'
             active={activeItem === 'All Spells'}
-            onClick={this.handleItemClick} />
+            onClick={this.handleMenuItemClick} />
           <Menu.Menu position='right'>
             <Menu.Item icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
-            {this.props.currentUser ? <AccountSettings /> : null }
+            {this.props.currentUser ? <AccountSettings /> : null}
             {this.renderLoginMenuItem()}
           </Menu.Menu>
         </Menu>
@@ -113,18 +112,18 @@ class App extends Component {
             name='Prepared Spells'
             icon='magic'
             active={activeItem === 'Prepared Spells'}
-            onClick={this.handleItemClick} />
+            onClick={this.handleMenuItemClick} />
           <Menu.Item
             name='Spell Book'
             icon='book'
             active={activeItem === 'Spell Book'}
-            onClick={this.handleItemClick} />
+            onClick={this.handleMenuItemClick} />
           <Menu.Item
             icon='list'
             name='All Spells'
             active={activeItem === 'All Spells'}
-            onClick={this.handleItemClick} />
-          {this.props.currentUser ? <AccountSettings mobile /> : null }
+            onClick={this.handleMenuItemClick} />
+          {this.props.currentUser ? <AccountSettings mobile /> : null}
           <Menu.Item content='Help' icon='help circle' href='https://github.com/niktill/enchant' target='_blank' link />
         </Sidebar>
 
@@ -149,7 +148,7 @@ class App extends Component {
 
   renderAppOnFetchComplete() {
     if (this.props.appReady && !this.props.apiData.error) {
-      return this.state.windowWidth <= 767 ? this.renderMobileApp() : this.renderDesktopApp()
+      return this.props.appView.mobile ? this.renderMobileApp() : this.renderDesktopApp()
     }
     return null;
   }
@@ -183,8 +182,16 @@ const mapStateToProps = (state) => {
     currentUser: state.currentUser,
     enchantMessage: state.enchantMessage,
     loginStatus: state.loginStatus,
-    appReady: state.appReady
+    appReady: state.appReady,
+    appView: state.appView
   };
 };
 
-export default connect(mapStateToProps, { fetchAPIData, getCurrentUser, checkLogInStatus, appReadytoRender })(App);
+export default connect(mapStateToProps,
+  {
+    fetchAPIData,
+    getCurrentUser,
+    checkLogInStatus,
+    appReadytoRender,
+    setAppView
+  })(App);
