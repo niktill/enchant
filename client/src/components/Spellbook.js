@@ -12,7 +12,7 @@ class Spellbook extends Component {
       <div className='tabContent'>
         <FilterSpells tabName='spellBookSpells' />
         <SortSpells tabName='spellBookSpells' />
-        {this.props.showHeader ? <h3 style={{textAlign: 'center'}}><Icon name='book' /> Spell Book </h3> : null}
+        {this.props.appView.mobile ? <h3 style={{textAlign: 'center'}}><Icon name='book' /> Spell Book </h3> : null}
         <SpellList tabName='spellBookSpells'
           spells={this.props.spellbookSpells}
           spellListMonitors={this.props.dailySpells}
@@ -25,7 +25,8 @@ class Spellbook extends Component {
 const mapStateToProps = (state) => {
   return {
     spellbookSpells: state.spellbookSpells,
-    dailySpells: state.dailySpells
+    dailySpells: state.dailySpells,
+    appView: state.appView
   };
 };
 

@@ -126,6 +126,14 @@ export const appReadytoRender = () => {
     };
 };
 
+// Set App view action
+export const setAppView = () => {
+    return {
+        type: 'SET_APP_VIEW',
+        payload: {windowWidth: document.documentElement.clientWidth}
+    };
+};
+
 // Select Spellbook Spell Action Creator
 export const selectSpellbookSpell = (spell) => async (dispatch, getState) => {
     const { currentUser, dailySpells } = getState();

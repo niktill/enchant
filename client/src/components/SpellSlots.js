@@ -12,7 +12,7 @@ class SpellSlots extends Component {
     render() {
         return (
             <div className='spellSlotsTable' style={{ 'marginBottom': '10px' }}>
-                {this.props.mobileTable ?
+                {this.props.appView.mobile ?
                     <Table unstackable definition celled style={{ 'marginBottom': '20px' }}>
                         <Table.Header fullWidth>
                             <Table.Row>
@@ -72,7 +72,7 @@ class SpellSlots extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return { spellSlots: state.spellSlots };
+    return { spellSlots: state.spellSlots, appView: state.appView };
 };
 
 export default connect(mapStateToProps, { setMaxSpellSlots, refillSpellSlots })(SpellSlots);

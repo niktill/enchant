@@ -12,7 +12,7 @@ class AllSpells extends Component {
       <div className='tabContent'>
         <FilterSpells tabName='allSpells' />
         <SortSpells tabName='allSpells' />
-        {this.props.showHeader ? <h3 style={{textAlign: 'center'}}><Icon name='list' /> All Spells </h3> : null}
+        {this.props.appView.mobile ? <h3 style={{textAlign: 'center'}}><Icon name='list' /> All Spells </h3> : null}
         <SpellList tabName='allSpells'
           spells={this.props.apiData.spells}
           spellListMonitors={this.props.spellbookSpells}
@@ -26,7 +26,8 @@ const mapStateToProps = (state) => {
   return {
     apiData: state.apiData,
     spellbookSpells: state.spellbookSpells,
-    selectedFilters: state.selectedFilters
+    selectedFilters: state.selectedFilters,
+    appView: state.appView
   };
 };
 

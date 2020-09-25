@@ -1,5 +1,6 @@
 .spellListGrid.ui.grid {
     margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .ui.checkbox .box, .ui.checkbox label {
