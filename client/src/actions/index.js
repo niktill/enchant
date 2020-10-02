@@ -140,10 +140,9 @@ export const selectSpellbookSpell = (spell) => async (dispatch, getState) => {
     // Check if user signed in
     if (currentUser) {
         try {
-            const currentDailySpells = dailySpells;
-            const newDailySpells = currentDailySpells.some(el => el.slug === spell.slug) ?
-                currentDailySpells.filter(spellInDailySpell => spellInDailySpell.slug !== spell.slug) : [...currentDailySpells, spell];
-            await axios.post('/api/current_user/dailyspells', { dailySpells: newDailySpells.map(spell => spell.slug) });
+            dailySpells.some(el => el.slug === spell.slug) ? 
+            await axios.delete('/api/current_user/dailyspells', { data: {spellSlug: spell.slug } }) : 
+            await axios.post('/api/current_user/dailyspells', { spellSlug: spell.slug });
         } catch {
             dispatch({ // error in saving spell book spell to account
                 type: 'ACTIVATE_ERROR_MESSAGE',
@@ -164,14 +163,12 @@ export const selectAllSpellsSpell = (spell) => async (dispatch, getState) => {
     // Check if user signed in
     if (currentUser) {
         try {
-            const currentUserSpellBook = spellbookSpells;
-            const newSpellBookSpells = currentUserSpellBook.some(el => el.slug === spell.slug) ?
-                currentUserSpellBook.filter(spellInBook => spellInBook.slug !== spell.slug) : [...currentUserSpellBook, spell];
-            await axios.post('/api/current_user/spellbookspells', { spellBookSpells: newSpellBookSpells.map(spell => spell.slug) });
+            spellbookSpells.some(el => el.slug === spell.slug) ? 
+            await axios.delete('/api/current_user/spellbookspells', { data: {spellSlug: spell.slug } }) : 
+            await axios.post('/api/current_user/spellbookspells', { spellSlug: spell.slug });
             // Do we need to remove a spell from Daily spell?
             if (dailySpells.some(el => el.slug === spell.slug)) {
-                const newDailySpells = dailySpells.filter(spellInDailySpell => spellInDailySpell.slug !== spell.slug);
-                await axios.post('/api/current_user/dailyspells', { dailySpells: newDailySpells.map(spell => spell.slug) });
+                await axios.delete('/api/current_user/dailyspells', { data: {spellSlug: spell.slug } });
             }
         } catch { // error in saving all spell select to account
             dispatch({
@@ -206,12 +203,11 @@ export const selectSortSpellLevel = (sorterName, tabName) => {
 
 // Cast spell from Daily Spells Tab
 export const castSpell = (spellLevel) => async (dispatch, getState) => {
-    const { currentUser, spellSlots } = getState();
+    const { currentUser } = getState();
     // check if user is signed in
     if (currentUser) {
         try {
-            const newSpellSlots = spellSlots.map((el, index) => index + 1 === spellLevel ? [el[0] - 1, el[1]] : el);
-            await axios.post('/api/current_user/spellslots', { spellSlots: newSpellSlots });
+            await axios.post('/api/current_user/spellslots/cast', { spellLevel: spellLevel });
         } catch { // error in saving spell cast to account
             dispatch({
                 type: 'ACTIVATE_ERROR_MESSAGE',
@@ -233,7 +229,7 @@ export const refillSpellSlots = () => async (dispatch, getState) => {
     if (currentUser) {
         try {
             const newSpellSlots = spellSlots.map(el => [el[1], el[1]]);
-            await axios.post('/api/current_user/spellslots', { spellSlots: newSpellSlots });
+            await axios.post('/api/current_user/spellslots/refill', { spellSlots: newSpellSlots });
         } catch { // error in saving refill spell slots to account
             dispatch({
                 type: 'ACTIVATE_ERROR_MESSAGE',
@@ -253,14 +249,11 @@ export const setMaxSpellSlots = (spellLevel, maxSpellSlots) => async (dispatch, 
     if (!maxSpellSlots || maxSpellSlots < 0) {
         maxSpellSlots = 0;
     }
-    const { currentUser, spellSlots } = getState();
+    const { currentUser } = getState();
     // check if user is signed in
     if (currentUser) {
         try {
-            const currentSpellSlots = spellSlots;
-            const newCurSpellSlots = (currentSpellSlots[spellLevel - 1][0] > maxSpellSlots) ? maxSpellSlots : spellSlots[spellLevel - 1][0]
-            const newSpellSlots = currentSpellSlots.map((el, index) => ((index + 1) === spellLevel) ? [newCurSpellSlots, maxSpellSlots] : el);
-            await axios.post('/api/current_user/spellslots', { spellSlots: newSpellSlots });
+            await axios.post('/api/current_user/spellslots/max', { spellLevel: spellLevel, maxSpellSlots: maxSpellSlots });
         } catch { // error in setting max spell slot to account
             dispatch({
                 type: 'ACTIVATE_ERROR_MESSAGE',

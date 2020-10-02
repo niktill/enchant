@@ -67,7 +67,6 @@ class SpellList extends Component {
     const requiresSorterHeaders = selectedSorter === 'level_int' || selectedSorter === 'school';
     if (numberOfSpells > 0) {
       const numberOfColumns = Math.ceil(numberOfSpells / this.maxSpellInColumn);
-      const setMaxColumnWidth = (this.maxColumnWidth * numberOfColumns) <= this.props.appView.windowWidth;
       const AllSpellsColumns = [];
       for (let columnNum = 1; columnNum < numberOfColumns + 1; columnNum++) {
         let curSpellIndexMin = 0 + ((columnNum - 1) * this.maxSpellInColumn);

@@ -16,6 +16,8 @@ class EnchantMessage extends Component {
                         positive={this.props.enchantMessage.type === 'success'}>
                         <Message.Header>{this.props.enchantMessage.header}</Message.Header>
                         <p>{this.props.enchantMessage.message}</p>
+                        {this.props.enchantMessage.type === 'error' ? 
+                        <p>Please try refreshing the page to resolve the issue.</p> : null}
                     </Message>
                 </div>
             );

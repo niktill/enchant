@@ -18,7 +18,8 @@ module.exports = (app) => {
     });
     app.post('/api/current_user/spellbookspells', async (req, res) => {
         if (req.user) {
-            const user = await User.findByIdAndUpdate(req.user.id, {spellBookSpells: req.body.spellBookSpells});
+            const user = await User.findByIdAndUpdate(req.user.id,
+                { $addToSet: { spellBookSpells: req.body.spellSlug } });
             if (user) {
                 res.sendStatus(200);
             } else {
@@ -28,6 +29,20 @@ module.exports = (app) => {
             res.sendStatus(400);
         }
     });
+    app.delete('/api/current_user/spellbookspells', async (req, res) => {
+        if (req.user) {
+            const user = await User.findByIdAndUpdate(req.user.id,
+                { $pull: { spellBookSpells: req.body.spellSlug, dailySpells: req.body.spellSlug } });
+            if (user) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(400);
+            }
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     // Daily Spells Routes
     app.get('/api/current_user/dailyspells', async (req, res) => {
         if (req.user) {
@@ -43,7 +58,21 @@ module.exports = (app) => {
     });
     app.post('/api/current_user/dailyspells', async (req, res) => {
         if (req.user) {
-            const user = await User.findByIdAndUpdate(req.user.id, {dailySpells: req.body.dailySpells});
+            const user = await User.findByIdAndUpdate(req.user.id,
+                { $addToSet: { dailySpells: req.body.spellSlug } });
+            if (user) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(400);
+            }
+        } else {
+            res.sendStatus(400);
+        }
+    });
+    app.delete('/api/current_user/dailyspells', async (req, res) => {
+        if (req.user) {
+            const user = await User.findByIdAndUpdate(req.user.id,
+                { $pull: { dailySpells: req.body.spellSlug } });
             if (user) {
                 res.sendStatus(200);
             } else {
@@ -68,9 +97,54 @@ module.exports = (app) => {
         }
     });
 
-    app.post('/api/current_user/spellslots', async (req, res) => {
+    app.post('/api/current_user/spellslots/max', async (req, res) => {
         if (req.user) {
-            const user = await User.findByIdAndUpdate(req.user.id, {spellSlots: req.body.spellSlots});
+            const spellSlotIndex = parseInt(req.body.spellLevel) - 1;
+            const setString = 'spellSlots.' + spellSlotIndex.toString();
+            const user = await User.findByIdAndUpdate(req.user.id,
+                { $set: { [setString]: [req.body.maxSpellSlots, req.body.maxSpellSlots] } });
+            if (user) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(400);
+            }
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.post('/api/current_user/spellslots/cast', async (req, res) => {
+        if (req.user) {
+            const spellSlotIndex = parseInt(req.body.spellLevel) - 1;
+            const setString = 'spellSlots.' + spellSlotIndex.toString() + '.0';
+            const user = await User.findOneAndUpdate({ _id: req.user.id, [setString]: { $gt: 0 } },
+                { $inc: { [setString]: -1 } });
+            if (user) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(400);
+            }
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.post('/api/current_user/spellslots/refill', async (req, res) => {
+        if (req.user) {
+            const user = await User.findByIdAndUpdate(req.user.id,
+                {
+                    $set: {
+                        'spellSlots.0': req.body.spellSlots[0],
+                        'spellSlots.1': req.body.spellSlots[1],
+                        'spellSlots.2': req.body.spellSlots[2],
+                        'spellSlots.3': req.body.spellSlots[3],
+                        'spellSlots.4': req.body.spellSlots[4],
+                        'spellSlots.5': req.body.spellSlots[5],
+                        'spellSlots.6': req.body.spellSlots[6],
+                        'spellSlots.7': req.body.spellSlots[7],
+                        'spellSlots.8': req.body.spellSlots[8]
+                    }
+                });
             if (user) {
                 res.sendStatus(200);
             } else {
