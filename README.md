@@ -24,7 +24,7 @@ Click on the "Prepared Spells" tab to view your prepared spell slots and spells 
 ---
 
 ## Credits
-- D&D 5e spell statistics pulled from https://api.open5e.com
+- D&D 5e spell statistics from https://open5e.com/
 - Frontend built with React and Redux: https://reactjs.org/, https://redux.js.org/
 - Styling from Semantic UI: https://react.semantic-ui.com/
 - Backend built with NodeJS and Express: https://nodejs.org/, https://expressjs.com/
