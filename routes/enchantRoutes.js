@@ -197,49 +197,55 @@ module.exports = (app, redisClient) => {
   app.get('/api/spells', async (req, res) => {
     try {
       // check if spellData is in redis cache
-      redisClient.get('spellData', async (err, data) => {
-        if (err) {
-          throw err;
-        }
-        if (data !== null) {
-          res.status(200).send({ spells: JSON.parse(data) });
-        } else {
-          // spellData is not in cache so we need to fetch from API
-          const listOfNonSpellCasters = [
-            'Barbarian',
-            'Fighter',
-            'Monk',
-            'Rogue',
-          ];
-          let data = { spells: [], classes: [] };
-          let pageNum = 1;
-          const pageNumEnd = 7;
-          // Fetch spell Data from API
-          for (pageNum; pageNum < pageNumEnd + 1; pageNum++) {
-            let response = await dnd5eapi.get(
-              '/spells/?page=' + pageNum.toString()
-            );
-            if (response.status === 200) {
-              data.spells = [...data.spells, ...response.data.results];
-            }
+      if (redisClient.connected) {
+        redisClient.get('spellData', async (err, data) => {
+          if (err) {
+            throw err;
           }
-          // Fetch class data from API, do not include non spell casters
-          let response = await dnd5eapi.get('/classes/');
-          if (response.status === 200) {
-            data.classes = response.data.results.filter(
-              (classFromAPI) =>
-                !listOfNonSpellCasters.includes(classFromAPI.name)
-            );
+          if (data !== null) {
+            res.status(200).send({ spells: JSON.parse(data) });
+          } else {
+            // spellData is not in cache so we need to fetch from API
+            const data = await getAPIData();
+            // save spell data to redis cache, expires every 24 hours
+            redisClient.setex('spellData', 86400, JSON.stringify(data));
+            // send spell data back to client
+            res.status(200).send({ spells: data });
           }
-          // save spell data to redis cache, expires every 24 hours
-          redisClient.setex('spellData', 86400, JSON.stringify(data));
-          // send spell data back to client
-          res.status(200).send({ spells: data });
-        }
-      });
+        });
+      } else {
+        // redis is not connected, just fetch data from api
+        const data = await getAPIData();
+        res.status(200).send({ spells: data });
+      }
     } catch (err) {
-      console.log(err);
       res.sendStatus(500);
     }
   });
+};
+
+const getAPIData = async () => {
+  try {
+    const listOfNonSpellCasters = ['Barbarian', 'Fighter', 'Monk', 'Rogue'];
+    let data = { spells: [], classes: [] };
+    let pageNum = 1;
+    const pageNumEnd = 7;
+    // Fetch spell Data from API
+    for (pageNum; pageNum < pageNumEnd + 1; pageNum++) {
+      let response = await dnd5eapi.get('/spells/?page=' + pageNum.toString());
+      if (response.status === 200) {
+        data.spells = [...data.spells, ...response.data.results];
+      }
+    }
+    // Fetch class data from API, do not include non spell casters
+    let response = await dnd5eapi.get('/classes/');
+    if (response.status === 200) {
+      data.classes = response.data.results.filter(
+        (classFromAPI) => !listOfNonSpellCasters.includes(classFromAPI.name)
+      );
+    }
+    return Promise.resolve(data);
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };
