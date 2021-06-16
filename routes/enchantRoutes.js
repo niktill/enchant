@@ -227,24 +227,34 @@ module.exports = (app, redisClient) => {
 const getAPIData = async () => {
   try {
     const listOfNonSpellCasters = ['Barbarian', 'Fighter', 'Monk', 'Rogue'];
-    let data = { spells: [], classes: [] };
+    const data = { spells: [], classes: [] };
+    const apiCalls = [];
+    // Fetch spell Data from API
     let pageNum = 1;
     const pageNumEnd = 7;
-    // Fetch spell Data from API
     for (pageNum; pageNum < pageNumEnd + 1; pageNum++) {
-      let response = await dnd5eapi.get('/spells/?page=' + pageNum.toString());
-      if (response.status === 200) {
-        data.spells = [...data.spells, ...response.data.results];
-      }
+      let spellApiCall = dnd5eapi.get('/spells/?page=' + pageNum.toString());
+      apiCalls.push(spellApiCall);
     }
     // Fetch class data from API, do not include non spell casters
-    let response = await dnd5eapi.get('/classes/');
-    if (response.status === 200) {
-      data.classes = response.data.results.filter(
+    apiCalls.push(dnd5eapi.get('/classes/'));
+    // make asynchornous calls to all apis
+    const responses = await Promise.all(apiCalls);
+    // check all responses were 200
+    if (responses.every((res) => res.status === 200)) {
+      let spellData = [];
+      responses.forEach((res, index) => {
+        if (index < pageNumEnd) {
+          spellData = spellData.concat(res.data.results);
+        }
+      });
+      data.spells = spellData;
+      data.classes = responses[responses.length - 1].data.results.filter(
         (classFromAPI) => !listOfNonSpellCasters.includes(classFromAPI.name)
       );
+      return Promise.resolve(data);
     }
-    return Promise.resolve(data);
+    throw new Error('Non-200 response from fetch D&D data');
   } catch (error) {
     return Promise.reject(error);
   }
