@@ -196,19 +196,19 @@ module.exports = (app, redisClient) => {
   // Get request for all spell statistics
   app.get('/api/spells', async (req, res) => {
     try {
-      // check if spellData is in redis cache
+      // check if apiData is in redis cache
       if (redisClient.connected) {
-        redisClient.get('spellData', async (err, data) => {
+        redisClient.get('apiData', async (err, data) => {
           if (err) {
             throw err;
           }
           if (data !== null) {
-            res.status(200).send({ spells: JSON.parse(data) });
+            res.status(200).send({ apiData: JSON.parse(data) });
           } else {
             // spellData is not in cache so we need to fetch from API
             const data = await getAPIData();
             // save spell data to redis cache, expires every 24 hours
-            redisClient.setex('spellData', 86400, JSON.stringify(data));
+            redisClient.setex('apiData', 86400, JSON.stringify(data));
             // send spell data back to client
             res.status(200).send({ apiData: data });
           }
