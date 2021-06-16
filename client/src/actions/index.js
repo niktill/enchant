@@ -108,8 +108,7 @@ export const fetchAPIData = () => async (dispatch) => {
   try {
     // Fetch spell Data
     const response = await axios.get('/api/spells');
-    console.log(response);
-    dispatch({ type: 'API_DATA_FETCHED', payload: response.data.spells });
+    dispatch({ type: 'API_DATA_FETCHED', payload: response.data.apiData });
     return true;
   } catch (err) {
     console.log(err);

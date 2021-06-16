@@ -210,13 +210,13 @@ module.exports = (app, redisClient) => {
             // save spell data to redis cache, expires every 24 hours
             redisClient.setex('spellData', 86400, JSON.stringify(data));
             // send spell data back to client
-            res.status(200).send({ spells: data });
+            res.status(200).send({ apiData: data });
           }
         });
       } else {
         // redis is not connected, just fetch data from api
         const data = await getAPIData();
-        res.status(200).send({ spells: data });
+        res.status(200).send({ apiData: data });
       }
     } catch (err) {
       res.sendStatus(500);
