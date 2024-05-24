@@ -4,7 +4,7 @@ Enchant is a D&D 5e Spell Book web application built with React-Redux, ExpressJS
 ---
 
 ## How to Use
-Enchant can be accessed at this url: https://enchant-spellbook.herokuapp.com/
+As Heroku does not offer free hosting anymore :( I am afraid this is only available by clone or downloading the source code and running the services on your local machine!
 
 ### Step 1 -- Logging In (Optional):
 To allow Enchant to save your activity, log in to a Google or Facebook account by clicking on the log in link at the top right. **Please note that you can fully use Enchant without using an account**, but all of your activity will be gone after exiting the web application.
