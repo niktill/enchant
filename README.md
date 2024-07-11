@@ -1,4 +1,4 @@
-⚠️Please note that with Heroku no longer offering free tier hosting the deployed app currently does not work! Please still feel free to review or use this code!
+⚠️**Please note that with Heroku no longer offering free tier hosting the deployed app currently does not work! Please still feel free to review or use this code!**
 
 ## Description
 Enchant is a D&D 5e Spell Book web application built with React-Redux, ExpressJS and MongoDB. This web application allows users to manage and track spell book spells, prepared spells, and spell slots for their D&D 5e characters and provides easy access to spell statistics.
